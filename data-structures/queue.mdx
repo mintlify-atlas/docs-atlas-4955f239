@@ -1,0 +1,214 @@
+---
+title: Queue Visualizer
+description: Interactive visualization of the Queue data structure with enqueue and dequeue operations
+---
+
+The Queue visualizer provides an interactive way to understand how the Queue data structure works. A Queue follows the FIFO (First In First Out) or LILO (Last In Last Out) principle, similar to a shopping queue.
+
+<Info>
+  Try the live visualizer at [dsvisualizer.isatvik.com/queue](https://dsvisualizer.isatvik.com/queue)
+</Info>
+
+## What is a Queue?
+
+Queue is a data structure where elements that enter first leave first. An analogy can be a shopping queue - the first person in line is the first person to be served.
+
+They are also known as:
+- **LILO** - Last In Last Out
+- **FIFO** - First In First Out
+
+The visualizer uses a circular array implementation for efficient memory usage.
+
+## Interactive Controls
+
+The visualizer provides two main operations you can perform:
+
+<Tabs>
+  <Tab title="Enqueue">
+    Adds an element to the rear of the queue.
+    
+    **How to use:**
+    1. Enter a value in the input field
+    2. Click the "Enqueue" button
+    3. Watch the element appear at the end of the queue
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Dequeue">
+    Removes the front element from the queue.
+    
+    **How to use:**
+    1. Click the "Dequeue" button
+    2. Watch the front element disappear from the queue
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+</Tabs>
+
+## Implementation Details
+
+The basic structure of a Queue using a circular array looks like this:
+
+```java Queue.java
+public class Queue {
+    private int[] queue;
+    private int length = 0;
+    private int front = 0;
+    private int rear = 0;
+    private int capacity;
+
+    public Queue(int capacity) {
+        queue = new int[capacity];
+        this.capacity = capacity;
+    }
+
+    public void enqueue(int value) {}
+    public void dequeue() {}
+    public int peek() {}
+    public boolean isEmpty() {}
+}
+```
+
+### Key Variables
+
+<Note>
+  This implementation uses a circular array for efficient memory usage.
+</Note>
+
+- **queue** - Array that holds all the elements
+- **length** - Current number of elements in the queue (different from array capacity)
+- **front** - Index of the first element in the circular array
+- **rear** - Index position after the last element in the circular array
+- **capacity** - Maximum size of the queue
+
+## Core Operations
+
+<Steps>
+  <Step title="Enqueue Operation">
+    The enqueue method adds an element to the rear of the queue.
+    
+    ```java enqueue.java
+    public void enqueue(int value) {
+        if (length == queue.length)
+            return; // Queue is full
+        
+        length++;
+        queue[rear] = value;
+        rear = (rear + 1) % capacity;
+    }
+    ```
+    
+    <Info>
+      The modulo operation `(rear + 1) % capacity` enables the circular array behavior, wrapping around when reaching the end.
+    </Info>
+  </Step>
+  
+  <Step title="Dequeue Operation">
+    The dequeue method removes the front element from the queue.
+    
+    ```java dequeue.java
+    public void dequeue() {
+        if (length == 0)
+            return; // Queue is empty
+        
+        length--;
+        queue[front] = 0;
+        front = (front + 1) % capacity;
+    }
+    ```
+    
+    <Note>
+      The front pointer moves forward, and the modulo operation ensures circular behavior.
+    </Note>
+  </Step>
+  
+  <Step title="Peek Operation">
+    The peek method returns the front element without removing it.
+    
+    ```java peek.java
+    public int peek() {
+        // Returns the first element in the queue
+        return queue[front];
+    }
+    ```
+  </Step>
+  
+  <Step title="isEmpty Operation">
+    Check if the queue is empty.
+    
+    ```java isEmpty.java
+    public boolean isEmpty() {
+        return length == 0;
+    }
+    ```
+  </Step>
+</Steps>
+
+## Visualization Features
+
+The interactive visualizer displays:
+
+- **Visual Queue**: Elements arranged horizontally with purple borders
+- **Front Position**: The leftmost element is always at the front
+- **Rear Position**: New elements appear at the right (rear)
+- **Animations**: Smooth transitions when adding or removing elements
+
+## Circular Array Concept
+
+The circular array implementation is more efficient than a linear array:
+
+- **No shifting required**: Elements don't need to be shifted when dequeuing
+- **Space efficiency**: Reuses empty spaces at the beginning of the array
+- **Constant time operations**: Both enqueue and dequeue are O(1)
+
+```java toString.java
+@override
+public String toString() {
+    String str1 = "";
+    
+    // First part: from front to end of array
+    for(int i = front; i < queue.length ; i++){
+        str += queue[i];
+    }
+    
+    String str2 = "";
+    
+    // Second part: from start to rear (circular wrap)
+    for(int i = rear; i < front; i++){
+        str += queue[i];
+    }
+    
+    return str1 + str2;
+}
+```
+
+<Note>
+  Printing a circular array requires two loops to handle the wrap-around behavior.
+</Note>
+
+## Performance Summary
+
+| Operation | Time Complexity | Space Complexity |
+|-----------|----------------|------------------|
+| Enqueue   | O(1)           | O(1)             |
+| Dequeue   | O(1)           | O(1)             |
+| Peek      | O(1)           | O(1)             |
+| isEmpty   | O(1)           | O(1)             |
+
+## Use Cases
+
+Queues are commonly used in:
+
+- **Task scheduling**: Managing jobs in order of arrival
+- **Breadth-First Search (BFS)**: Graph traversal algorithms
+- **Buffer management**: Handling requests in web servers
+- **Print spooling**: Managing print jobs
+
+<Info>
+  The circular array implementation makes all queue operations extremely efficient with constant time complexity!
+</Info>

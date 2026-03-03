@@ -1,122 +1,93 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "DS Visualizer",
+  "theme": "palm",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#3B82F6",
+    "light": "#60A5FA",
+    "dark": "#2563EB"
   },
-  "favicon": "/favicon.svg",
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/ds-visualizer/ds-visualizer"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/ds-visualizer/ds-visualizer"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": ["concepts/overview", "concepts/visualizers", "concepts/code-explanations"]
+          },
+          {
+            "group": "Contributing",
+            "pages": ["contributing/overview", "contributing/setup", "contributing/guidelines"]
+          }
+        ]
+      },
+      {
+        "tab": "Data Structures",
+        "groups": [
+          {
+            "group": "Linear Structures",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "data-structures/stack",
+              "data-structures/queue",
+              "data-structures/linkedlist"
             ]
           },
           {
-            "group": "Customization",
+            "group": "Trees",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "data-structures/binary-tree",
+              "data-structures/tree",
+              "data-structures/tree-traversals"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Graphs",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
+              "data-structures/graph",
+              "data-structures/graph-traversals"
             ]
           },
           {
-            "group": "AI tools",
+            "group": "Hash-Based",
             "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "data-structures/hashmap",
+              "data-structures/hashset"
+            ]
+          },
+          {
+            "group": "Priority & Heap",
+            "pages": [
+              "data-structures/heap",
+              "data-structures/priority-queue"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Algorithms",
         "groups": [
           {
-            "group": "API documentation",
-            "pages": [
-              "api-reference/introduction"
-            ]
-          },
-          {
-            "group": "Endpoint examples",
-            "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
-            ]
+            "group": "Sorting",
+            "pages": ["algorithms/selection-sort"]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    ]
   }
 }

@@ -1,0 +1,227 @@
+---
+title: Binary Search Tree (BST)
+description: Interactive visualizer for Binary Search Tree data structure with insertion and search operations
+---
+
+# Binary Search Tree (BST)
+
+A Binary Search Tree is a node-based data structure that maintains sorted data and allows for efficient search, insertion, and deletion operations. Each node has at most two children, with values in the left subtree being less than the parent and values in the right subtree being greater or equal.
+
+<Note>
+  Try the interactive visualizer: [Binary Tree Visualizer](https://dsvisualizer.isatvik.com/binarytree)
+</Note>
+
+## Structure
+
+Each node in a BST contains:
+- **value**: The data stored in the node
+- **leftChild**: Pointer to the left child node (smaller values)
+- **rightChild**: Pointer to the right child node (greater or equal values)
+
+```java
+public class Node {
+    private Node leftChild;
+    private Node rightChild;
+    private int value;
+
+    public Node(int value) {
+        this.value = value;
+    }
+}
+```
+
+## Key Operations
+
+<Tabs>
+  <Tab title="Insert">
+    ### Insert Operation
+
+    Insertion in a BST follows the binary search property to find the correct position for the new value.
+
+    **Algorithm:**
+    1. If the tree is empty, create the root node
+    2. Start from the root and compare the value
+    3. If value < current node, traverse left
+    4. If value >= current node, traverse right
+    5. Insert when an empty position is found
+
+    ```java
+public void insert(int value) {
+    Node node = new Node(value);
+    
+    if (root == null) {
+        root = node;
+        return;
+    }
+    
+    Node current = root;
+    while (true) {
+        if (value < current.value) {
+            if (current.leftChild == null) {
+                current.leftChild = node;
+                break;
+            }
+            current = current.leftChild;
+        } else {
+            if (current.rightChild == null) {
+                current.rightChild = node;
+                break;
+            }
+            current = current.rightChild;
+        }
+    }
+}
+    ```
+
+    **Time Complexity:** O(log n) average case, O(n) worst case (unbalanced tree)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+
+  <Tab title="Search">
+    ### Find Operation
+
+    Searching in a BST leverages the sorted property to efficiently locate values.
+
+    **Algorithm:**
+    1. Start from the root
+    2. Compare target value with current node
+    3. If equal, value is found
+    4. If target > current, search right subtree
+    5. If target < current, search left subtree
+    6. Return false if we reach null
+
+    ```java
+public boolean find(int value) {
+    Node current = root;
+    while (current != null) {
+        if (value == current.value)
+            return true;
+        else if (value > current.value)
+            current = current.rightChild;
+        else if (value < current.value)
+            current = current.leftChild;
+    }
+    return false;
+}
+    ```
+
+    **Time Complexity:** O(log n) average case, O(n) worst case
+    
+    **Space Complexity:** O(1)
+  </Tab>
+
+  <Tab title="Height">
+    ### Height Calculation
+
+    The height of a tree is the longest path from root to a leaf node. This operation uses recursion to traverse both subtrees.
+
+    **Algorithm:**
+    1. Base case: if node is null, return 0
+    2. Recursively calculate height of left subtree
+    3. Recursively calculate height of right subtree
+    4. Return 1 + max(leftHeight, rightHeight)
+
+    ```java
+public int height() {
+    return height(root);
+}
+
+private int height(Node root) {
+    if (root == null)
+        return 0;
+    
+    return 1 + Math.max(height(root.leftChild), height(root.rightChild));
+}
+    ```
+
+    **Time Complexity:** O(n) - visits every node
+    
+    **Space Complexity:** O(h) - recursive call stack, where h is height
+  </Tab>
+</Tabs>
+
+## Properties
+
+<AccordionGroup>
+  <Accordion title="BST Invariant">
+    The fundamental property of BSTs:
+    - All values in the left subtree < parent value
+    - All values in the right subtree >= parent value
+    - This property holds recursively for all subtrees
+  </Accordion>
+
+  <Accordion title="Performance Characteristics">
+    **Balanced BST:**
+    - Search: O(log n)
+    - Insert: O(log n)
+    - Delete: O(log n)
+    - Space: O(n)
+
+    **Worst Case (Unbalanced):**
+    - All operations degrade to O(n) when the tree becomes a linked list
+  </Accordion>
+
+  <Accordion title="Use Cases">
+    - Maintaining sorted data with dynamic insertions/deletions
+    - Database indexing
+    - File system organization
+    - Expression parsing
+    - Priority queues (when balanced)
+  </Accordion>
+</AccordionGroup>
+
+## Interactive Visualizer
+
+The Binary Tree visualizer provides:
+- **Insert**: Add values and watch the tree grow dynamically
+- **Visual feedback**: See how values are placed according to BST rules
+- **Animated operations**: Understand the insertion algorithm step-by-step
+
+<Card title="Try it Live" icon="tree" href="https://dsvisualizer.isatvik.com/binarytree">
+  Experiment with the interactive Binary Search Tree visualizer to see insertions in real-time
+</Card>
+
+## Code Implementation
+
+The visualizer implements the BST using TypeScript with the following key features:
+
+```typescript
+const insert = async (
+  value: number,
+  rootObj: { root: Node<number> | null },
+  renderTree: () => Promise<void>
+) => {
+  if (!rootObj.root) {
+    rootObj.root = new Node(value);
+    await renderTree();
+    return;
+  }
+  let current = rootObj.root;
+  while (current) {
+    if (value >= current.value) {
+      if (!current.right) {
+        current.right = new Node(value);
+        break;
+      } else current = current.right;
+    } else {
+      if (!current.left) {
+        current.left = new Node(value);
+        break;
+      } else current = current.left;
+    }
+  }
+  await renderTree();
+};
+```
+
+## Related Topics
+
+<CardGroup cols={2}>
+  <Card title="Tree Traversals" icon="route" href="/data-structures/tree-traversals">
+    Learn about different ways to traverse binary trees
+  </Card>
+  <Card title="General Tree" icon="diagram-tree" href="/data-structures/tree">
+    Explore general tree structures with multiple children
+  </Card>
+</CardGroup>

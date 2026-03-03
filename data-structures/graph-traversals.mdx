@@ -1,0 +1,417 @@
+---
+title: 'Graph Traversal Algorithms'
+description: 'Interactive visualizations of Breadth-First Search (BFS) and Depth-First Search (DFS) graph traversal algorithms'
+---
+
+# Graph Traversal Algorithms
+
+Graph traversal algorithms systematically visit all vertices in a graph. Unlike trees, graphs don't have a root node, so you must specify a starting vertex. The two fundamental traversal algorithms are Breadth-First Search (BFS) and Depth-First Search (DFS).
+
+## Try It Out
+
+Visualize both traversal algorithms in action:
+
+<Card title="Graph Traversals Visualizer" icon="route" href="https://dsvisualizer.isatvik.com/graphtraversals">
+  Watch BFS and DFS algorithms traverse through graphs step-by-step
+</Card>
+
+## Why Track Visited Vertices?
+
+<Warning>
+  Unlike tree traversals, graph traversals must track visited vertices to prevent infinite loops. Graphs can have cycles, so without tracking, you could revisit the same vertex endlessly.
+</Warning>
+
+## Breadth-First Search (BFS)
+
+<Info>
+  BFS explores all vertices at the current level before moving to the next level. Think of it as exploring outward in waves from the starting vertex.
+</Info>
+
+### How BFS Works
+
+<Steps>
+  <Step title="Initialize">
+    Create a queue and a visited list. Add the starting vertex to both.
+
+    ```java
+    Queue<Node> queue = new LinkedList<Node>();
+    List<Node> visited = new LinkedList<Node>();
+
+    queue.add(startNode);
+    visited.add(startNode);
+    ```
+  </Step>
+
+  <Step title="Process Queue">
+    While the queue is not empty, remove a vertex and process it.
+
+    ```java
+    while (!queue.isEmpty()) {
+      Node node = queue.poll();
+      System.out.print(node + " ");
+    }
+    ```
+  </Step>
+
+  <Step title="Add Neighbors">
+    For each unvisited neighbor, add it to both the queue and visited list.
+
+    ```java
+    for (Node child : node.edges) {
+      if (visited.contains(child))
+        continue; // Skip if already visited
+
+      queue.add(child);
+      visited.add(child);
+    }
+    ```
+  </Step>
+
+  <Step title="Repeat">
+    Continue until the queue is empty, meaning all reachable vertices have been visited.
+  </Step>
+</Steps>
+
+### Complete BFS Implementation
+
+```java
+public void breadthFirst(String label) {
+  Node labelNode = findNode(label);
+
+  if (labelNode == null)
+    return;
+
+  // Track visited vertices to prevent infinite loops
+  List<Node> visited = new LinkedList<Node>();
+  Queue<Node> queue = new LinkedList<Node>();
+
+  queue.add(labelNode);
+  visited.add(labelNode);
+
+  while (!queue.isEmpty()) {
+    Node node = queue.poll();
+    System.out.print(node + " ");
+
+    for (Node child : node.edges) {
+      // Critical: Check if we've visited this vertex
+      // Without this, we'll loop infinitely!
+      if (visited.contains(child))
+        continue;
+
+      queue.add(child);
+      visited.add(child);
+    }
+  }
+}
+```
+
+### BFS Example
+
+Consider this directed graph:
+
+```
+    1
+   / \
+  2   3
+   \ /
+    4
+```
+
+**Starting from vertex 1:**
+
+<Tabs>
+  <Tab title="Order 1">
+    **Traversal Order:** [1, 2, 3, 4]
+
+    1. Visit 1 (starting vertex)
+    2. Visit 1's neighbors: 2, 3
+    3. Visit 2's neighbors: 4
+    4. 3's neighbors already visited
+  </Tab>
+  <Tab title="Order 2">
+    **Traversal Order:** [1, 3, 2, 4]
+
+    1. Visit 1 (starting vertex)
+    2. Visit 1's neighbors: 3, 2 (different order)
+    3. Visit 3's neighbors: 4
+    4. 2's neighbors already visited
+
+    <Note>
+      The exact order depends on how edges are stored in the adjacency list.
+    </Note>
+  </Tab>
+</Tabs>
+
+### BFS Complexity
+
+<AccordionGroup>
+  <Accordion title="Time Complexity">
+    **O(V²) with LinkedList, O(V) with HashSet**
+
+    - Visit each vertex once: O(V)
+    - Check each edge once: O(E)
+    - Visited check with LinkedList: O(V) per check
+    - Total with LinkedList: O(V²)
+    - Total with HashSet: O(V + E) = O(V)
+
+    <Tip>
+      Use a HashSet instead of LinkedList for the visited list to achieve O(1) lookup time and reduce overall complexity to O(V).
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Space Complexity">
+    **O(V)**
+
+    - Queue can hold up to O(V) vertices
+    - Visited list stores O(V) vertices
+    - Total space: O(V)
+  </Accordion>
+</AccordionGroup>
+
+## Depth-First Search (DFS)
+
+<Info>
+  DFS explores as far as possible along each branch before backtracking. Think of it as diving deep into one path before exploring alternatives.
+</Info>
+
+### How DFS Works
+
+<Steps>
+  <Step title="Initialize">
+    Create a stack and a visited list. Add the starting vertex to both.
+
+    ```java
+    Stack<Node> stack = new Stack<Node>();
+    List<Node> visited = new LinkedList<Node>();
+
+    stack.add(startNode);
+    visited.add(startNode);
+    ```
+  </Step>
+
+  <Step title="Process Stack">
+    While the stack is not empty, pop a vertex and process it.
+
+    ```java
+    while (!stack.isEmpty()) {
+      Node node = stack.pop();
+      System.out.print(node + " ");
+    }
+    ```
+  </Step>
+
+  <Step title="Add Neighbors">
+    For each unvisited neighbor, push it onto the stack and mark as visited.
+
+    ```java
+    for (Node child : node.edges) {
+      if (!visited.contains(child)) {
+        stack.push(child);
+        visited.add(child);
+      }
+    }
+    ```
+  </Step>
+
+  <Step title="Repeat">
+    Continue until the stack is empty, meaning all reachable vertices have been explored.
+  </Step>
+</Steps>
+
+### Complete DFS Implementation
+
+```java
+public void depthFirst(String label) {
+  Node labelNode = findNode(label);
+
+  if (labelNode == null)
+    return;
+
+  List<Node> visited = new LinkedList<Node>();
+  Stack<Node> stack = new Stack<Node>();
+
+  stack.add(labelNode);
+  visited.add(labelNode);
+
+  while (!stack.isEmpty()) {
+    Node node = stack.pop();
+    System.out.print(node + " ");
+
+    for (Node child : node.edges) {
+      if (!visited.contains(child)) {
+        stack.push(child);
+        visited.add(child);
+      }
+    }
+  }
+}
+```
+
+<Note>
+  DFS can also be implemented recursively, but the stack-based iterative approach is shown here as it's easier to understand and visualize.
+</Note>
+
+### DFS Example
+
+Using the same directed graph:
+
+```
+    1
+   / \
+  2   3
+   \ /
+    4
+```
+
+**Starting from vertex 1:**
+
+<Tabs>
+  <Tab title="Path 1">
+    **Traversal Order:** [1, 2, 4, 3]
+
+    1. Visit 1 (starting vertex)
+    2. Push 2 and 3, pop 2 (go deep)
+    3. Push 4 from 2
+    4. Pop 4, then pop 3
+  </Tab>
+  <Tab title="Path 2">
+    **Traversal Order:** [1, 3, 4, 2]
+
+    1. Visit 1 (starting vertex)
+    2. Push 3 and 2, pop 3 (go deep)
+    3. Push 4 from 3
+    4. Pop 4, then pop 2
+
+    <Note>
+      The order depends on which neighbor is pushed to the stack first.
+    </Note>
+  </Tab>
+</Tabs>
+
+### DFS Complexity
+
+<AccordionGroup>
+  <Accordion title="Time Complexity">
+    **O(V²) with LinkedList, O(V) with HashSet**
+
+    - Visit each vertex once: O(V)
+    - Check each edge once: O(E)
+    - Visited check with LinkedList: O(V) per check
+    - Total with LinkedList: O(V²)
+    - Total with HashSet: O(V + E) = O(V)
+
+    <Tip>
+      Like BFS, use a HashSet for the visited list to optimize to O(V) time complexity.
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Space Complexity">
+    **O(V)**
+
+    - Stack can hold up to O(V) vertices in worst case
+    - Visited list stores O(V) vertices
+    - Total space: O(V)
+  </Accordion>
+</AccordionGroup>
+
+## BFS vs DFS Comparison
+
+<Tabs>
+  <Tab title="Data Structure">
+    | Algorithm | Data Structure | Behavior |
+    |-----------|----------------|----------|
+    | **BFS** | Queue (FIFO) | Explores level by level |
+    | **DFS** | Stack (LIFO) | Explores depth first |
+  </Tab>
+
+  <Tab title="Use Cases">
+    **Use BFS when:**
+    - Finding shortest path in unweighted graphs
+    - Level-order traversal needed
+    - Finding all nodes within a certain distance
+    - Finding connected components
+
+    **Use DFS when:**
+    - Detecting cycles in graphs
+    - Topological sorting
+    - Path finding (any path, not necessarily shortest)
+    - Solving maze problems
+  </Tab>
+
+  <Tab title="Performance">
+    | Aspect | BFS | DFS |
+    |--------|-----|-----|
+    | Time | O(V) with HashSet | O(V) with HashSet |
+    | Space | O(V) | O(V) |
+    | Memory | More memory (wider queue) | Less memory (deeper stack) |
+    | Path | Finds shortest path | Any path |
+  </Tab>
+</Tabs>
+
+## Critical Implementation Details
+
+<Warning>
+  **Always track visited vertices!** Without tracking, your traversal will enter an infinite loop on graphs with cycles.
+</Warning>
+
+<Tip>
+  **Optimization:** Replace `List<Node>` with `HashSet<Node>` for the visited collection to reduce time complexity from O(V²) to O(V).
+</Tip>
+
+## Common Applications
+
+<CardGroup cols={2}>
+  <Card title="BFS Applications" icon="layer-group">
+    - Shortest path in unweighted graphs
+    - Social network friend recommendations (within N degrees)
+    - Web crawlers (level by level)
+    - Network broadcasting
+  </Card>
+  <Card title="DFS Applications" icon="arrow-down-long">
+    - Cycle detection
+    - Topological sorting
+    - Solving puzzles with one solution
+    - Finding strongly connected components
+  </Card>
+</CardGroup>
+
+## Interactive Learning
+
+The visualizer allows you to:
+
+<Steps>
+  <Step title="Build a Graph">
+    Create your own graph structure by adding vertices and edges
+  </Step>
+  <Step title="Choose Starting Vertex">
+    Select which vertex to start the traversal from
+  </Step>
+  <Step title="Watch BFS/DFS">
+    See the algorithms traverse through your graph step-by-step
+  </Step>
+  <Step title="Compare Results">
+    Observe how BFS and DFS produce different traversal orders
+  </Step>
+</Steps>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Graph Basics" icon="network-wired" href="/data-structures/graph">
+    Review graph structure and operations
+  </Card>
+  <Card title="Try the Visualizer" icon="play" href="https://dsvisualizer.isatvik.com/graphtraversals">
+    Practice BFS and DFS with the interactive tool
+  </Card>
+</CardGroup>
+
+## Key Takeaways
+
+<Note>
+  - **BFS** uses a queue and explores level by level (breadth-wise)
+  - **DFS** uses a stack and explores depth-first along each branch
+  - Always track visited vertices to prevent infinite loops in cyclic graphs
+  - Use HashSet for O(1) visited checks instead of LinkedList's O(V)
+  - Both algorithms have O(V) time and space complexity when optimized
+  - Choose BFS for shortest paths, DFS for cycle detection and topological sorting
+</Note>

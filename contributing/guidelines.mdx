@@ -1,0 +1,242 @@
+---
+title: Contribution Guidelines
+description: Standards and best practices for contributing to DS Visualizer
+---
+
+## Before You Start
+
+Before submitting a contribution, please:
+
+1. **Check existing issues and PRs** to avoid duplicate work
+2. **Open an issue** for major changes to discuss your approach
+3. **Read the documentation** to understand the project structure
+4. **Set up your development environment** following the [Setup Guide](/contributing/setup)
+
+<Tip>
+  Small fixes like typos can be submitted directly as pull requests without opening an issue first.
+</Tip>
+
+## Technology Standards
+
+DS Visualizer maintains specific technology standards:
+
+```text
+Language: TypeScript, CSS
+Framework: Next.js, TailwindCSS
+Package Manager: Yarn v1.22.10
+Formatter: Prettier
+```
+
+### TypeScript
+
+- Write type-safe code with proper type annotations
+- Avoid using `any` types when possible
+- Use interfaces for object shapes
+- Leverage TypeScript's type inference
+
+<CodeGroup>
+
+```typescript Good
+interface VisualizationProps {
+  data: number[];
+  speed: number;
+  onComplete: () => void;
+}
+
+const Visualization: React.FC<VisualizationProps> = ({ data, speed, onComplete }) => {
+  // Implementation
+};
+```
+
+```typescript Avoid
+const Visualization = (props: any) => {
+  // Avoid using 'any' type
+};
+```
+
+</CodeGroup>
+
+### Styling with TailwindCSS
+
+- Use TailwindCSS utility classes for styling
+- Keep custom CSS minimal
+- Use Tailwind's responsive modifiers for mobile-first design
+- Leverage Tailwind's color palette for consistency
+
+```jsx
+<div className="flex items-center justify-center p-4 bg-blue-500 rounded-lg shadow-md hover:bg-blue-600 transition-colors">
+  <span className="text-white font-semibold">Interactive Element</span>
+</div>
+```
+
+### Animations with Framer Motion
+
+- Use Framer Motion for smooth animations
+- Keep animations performant and purposeful
+- Ensure animations enhance rather than distract from content
+
+## Code Quality
+
+### Formatting
+
+<Warning>
+  All code must be formatted with Prettier before committing. Unformatted code may not be accepted.
+</Warning>
+
+Run Prettier on your changes:
+
+```bash
+# Format specific file
+npx prettier --write path/to/file.tsx
+
+# Format all files (if configured)
+npx prettier --write .
+```
+
+### Code Organization
+
+<Note>
+  The project needs help with refactoring TypeScript imports. Consider cleaning up import statements in your contributions.
+</Note>
+
+Best practices:
+
+- Keep imports organized and clean
+- Group related functionality
+- Use meaningful variable and function names
+- Write self-documenting code with clear intent
+- Add comments for complex logic
+
+## Content Contributions
+
+### MDX Content Structure
+
+All content is located in `content/[BlogName]/**` directories:
+
+<Steps>
+  <Step title="Choose the right directory">
+    Navigate to the appropriate content directory or create a new one following the naming convention `content/[TopicName]/`
+  </Step>
+  
+  <Step title="Create or edit MDX files">
+    Write your content using MDX format, which allows you to:
+    - Use Markdown syntax
+    - Include React components
+    - Add code examples with syntax highlighting
+    - Create interactive visualizations
+  </Step>
+  
+  <Step title="Test your content">
+    Run the development server (`yarn dev`) and verify your content displays correctly
+  </Step>
+</Steps>
+
+### Content Guidelines
+
+- **Clarity**: Write clear, concise explanations suitable for learners
+- **Accuracy**: Ensure technical accuracy in all content
+- **Examples**: Include code examples and visualizations where helpful
+- **Formatting**: Use proper Markdown formatting and code highlighting
+- **Accessibility**: Write inclusive content accessible to all skill levels
+
+## Pull Request Process
+
+### Creating a Pull Request
+
+<Steps>
+  <Step title="Create a feature branch">
+    ```bash
+    git checkout -b feature/your-feature-name
+    ```
+    
+    Use descriptive branch names:
+    - `feature/` for new features
+    - `fix/` for bug fixes
+    - `docs/` for documentation
+    - `refactor/` for code improvements
+  </Step>
+  
+  <Step title="Make your changes">
+    - Write clean, well-tested code
+    - Format with Prettier
+    - Follow the project's coding standards
+    - Test thoroughly in development
+  </Step>
+  
+  <Step title="Commit your changes">
+    ```bash
+    git add .
+    git commit -m "feat: add binary search visualization"
+    ```
+    
+    Write clear, descriptive commit messages following conventional commits format.
+  </Step>
+  
+  <Step title="Push and create PR">
+    ```bash
+    git push origin feature/your-feature-name
+    ```
+    
+    Then open a pull request on GitHub with:
+    - Clear title and description
+    - Reference to related issues
+    - Screenshots/demos if applicable
+    - Summary of changes made
+  </Step>
+</Steps>
+
+### PR Review Process
+
+1. **Automated checks** will run on your PR
+2. **Maintainers will review** your code and provide feedback
+3. **Address feedback** by making requested changes
+4. **Approval and merge** once all requirements are met
+
+<Tip>
+  Be patient and responsive during the review process. Maintainers may request changes or ask questions about your implementation.
+</Tip>
+
+## Testing
+
+Before submitting your PR:
+
+- **Test locally**: Run `yarn dev` and verify everything works
+- **Check all pages**: Ensure you haven't broken existing functionality
+- **Test edge cases**: Try different scenarios and inputs
+- **Cross-browser testing**: Verify compatibility if making UI changes
+
+## Areas Needing Help
+
+The project has identified these priority areas:
+
+<CardGroup cols={3}>
+  <Card title="UI Design" icon="palette">
+    Page design and user interface improvements
+  </Card>
+  
+  <Card title="Import Cleanup" icon="broom">
+    Refactoring TypeScript imports for better organization
+  </Card>
+  
+  <Card title="Dependencies" icon="package">
+    Updating and maintaining project dependencies
+  </Card>
+</CardGroup>
+
+## Communication
+
+- **Be respectful**: Treat all contributors with respect
+- **Be constructive**: Provide helpful feedback
+- **Be patient**: Remember that maintainers are often volunteers
+- **Be collaborative**: Work together to improve the project
+
+## Questions or Issues?
+
+If you have questions or run into issues:
+
+1. Check the [GitHub Issues](https://github.com/ds-visualizer/ds-visualizer/issues) tab
+2. Search for existing discussions or solutions
+3. Open a new issue if your question hasn't been addressed
+4. Provide as much context as possible
+
+Thank you for contributing to DS Visualizer! Your efforts help make computer science education more accessible to everyone.

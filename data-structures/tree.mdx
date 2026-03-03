@@ -1,0 +1,297 @@
+---
+title: General Tree
+description: Understanding general tree data structures with multiple children per node
+---
+
+# General Tree
+
+A general tree is a hierarchical data structure where each node can have any number of children, unlike binary trees which are limited to two children. Trees are non-circular structures that organize data in parent-child relationships.
+
+<Note>
+  Try the interactive visualizer: [Tree Visualizer](https://dsvisualizer.isatvik.com/tree)
+</Note>
+
+## Tree vs Graph
+
+The key distinction between trees and graphs:
+
+<Tabs>
+  <Tab title="Tree">
+    ```text
+           1
+        /  |  \
+       2   3   4
+    ```
+    
+    **Trees are NOT circular** - no cycles exist, creating a strict hierarchy
+  </Tab>
+  
+  <Tab title="Graph">
+    ```text
+          1
+        /   \
+       2 --- 3
+    ```
+    
+    **Graphs CAN be circular** - cycles are allowed between nodes
+  </Tab>
+</Tabs>
+
+## Node Structure
+
+General tree nodes are more flexible than binary tree nodes:
+
+```java
+class Node {
+    int value;
+    Node parent = null;
+    public LinkedList<Node> children = new LinkedList<Node>();
+    
+    public Node(int value) {
+        this.value = value;
+    }
+    
+    public Node(int value, Node parent) {
+        this.value = value;
+        this.parent = parent;
+    }
+}
+```
+
+**Key Components:**
+- **value**: Data stored in the node
+- **parent**: Pointer to the parent node
+- **children**: List of child nodes (can be any number)
+
+<Warning>
+  Unlike binary trees with fixed left/right pointers, general trees use a list structure to accommodate variable numbers of children.
+</Warning>
+
+## Core Operations
+
+<AccordionGroup>
+  <Accordion title="Add Node">
+    ### Adding Nodes to Tree
+
+    Nodes are added by specifying a parent value and the new node's value.
+
+    ```java
+public void addNode(int parent, int value) {
+    Node parentNode = findNode(parent);
+    
+    if (parentNode == null)
+        return; // Parent must exist
+    
+    boolean exist = contains(value);
+    if (exist)
+        return; // Values must be unique
+    
+    Node childNode = new Node(value, parentNode);
+    nodes.add(childNode);
+    parentNode.children.add(childNode);
+}
+    ```
+
+    **Time Complexity:** O(n) - due to findNode and contains operations
+    
+    **Space Complexity:** O(1)
+  </Accordion>
+
+  <Accordion title="Find Node">
+    ### Searching for Nodes
+
+    Helper function to locate nodes by value.
+
+    ```java
+private Node findNode(int value) {
+    for (Node node : nodes)
+        if (node.value == value)
+            return node;
+    return null;
+}
+
+private Boolean contains(int value) {
+    for (Node node : nodes)
+        if (node.value == value)
+            return true;
+    return false;
+}
+    ```
+
+    **Time Complexity:** O(n) - can be optimized to O(1) with HashMap
+    
+    **Space Complexity:** O(1)
+
+    <Tip>
+      Performance can be improved by maintaining a HashMap of values to nodes, reducing search time to O(1).
+    </Tip>
+  </Accordion>
+
+  <Accordion title="Get Children">
+    ### Retrieving Child Nodes
+
+    Returns all children of a given parent node.
+
+    ```java
+public List<Integer> children(int parent) {
+    Node parentNode = findNode(parent);
+    
+    if (parentNode == null)
+        return null;
+    
+    LinkedList<Integer> childrenList = new LinkedList<Integer>();
+    
+    for (Node child : parentNode.children)
+        childrenList.add(child.value);
+    
+    return childrenList;
+}
+    ```
+
+    **Time Complexity:** O(n + c) where c is the number of children
+    
+    **Space Complexity:** O(c) for the output list
+  </Accordion>
+
+  <Accordion title="Get Parent">
+    ### Finding Parent Node
+
+    Retrieves the parent of a given child node.
+
+    ```java
+public int parent(int child) {
+    Node childNode = findNode(child);
+    
+    if (childNode == null)
+        return -1; // Error: node not found
+    
+    return childNode.parent.value;
+}
+    ```
+
+    **Time Complexity:** O(n) - due to findNode
+    
+    **Space Complexity:** O(1)
+  </Accordion>
+
+  <Accordion title="Calculate Height">
+    ### Tree Height
+
+    Determines the maximum depth from root to any leaf.
+
+    ```java
+public int height() {
+    int[] maxHeight = new int[1];
+    height(root, 1, maxHeight);
+    return maxHeight[0];
+}
+
+private int height(Node node, int currentHeight, int[] maxHeight) {
+    if (node == null)
+        return currentHeight;
+    
+    for (Node child : node.children) {
+        int childHeight = height(child, currentHeight + 1, maxHeight);
+        if (childHeight > maxHeight[0])
+            maxHeight[0] = childHeight;
+    }
+    
+    return currentHeight;
+}
+    ```
+
+    **Time Complexity:** O(n) - visits all nodes
+    
+    **Space Complexity:** O(h) - recursion stack depth
+  </Accordion>
+
+  <Accordion title="Print Tree">
+    ### Tree Visualization
+
+    Recursively prints the tree structure showing node connections.
+
+    ```java
+public void print() {
+    print(root);
+}
+
+private void print(Node node) {
+    if (node == null)
+        return;
+    
+    String children = "[";
+    for (Node child : node.children)
+        children += child.value + ", ";
+    
+    System.out.println(node.value + " is connected to " + children + "]");
+    
+    for (Node child : node.children)
+        print(child);
+}
+    ```
+
+    **Time Complexity:** O(n)
+    
+    **Space Complexity:** O(h) - recursion depth
+  </Accordion>
+</AccordionGroup>
+
+## Tree Properties
+
+<CardGroup cols={2}>
+  <Card title="Hierarchical Structure" icon="sitemap">
+    Trees represent hierarchical relationships with a clear parent-child structure starting from a single root.
+  </Card>
+  
+  <Card title="No Cycles" icon="ban">
+    Trees are acyclic - there's exactly one path between any two nodes, preventing circular references.
+  </Card>
+  
+  <Card title="Variable Children" icon="list">
+    Each node can have any number of children (0 to many), unlike binary trees' two-child limit.
+  </Card>
+  
+  <Card title="Unique Values" icon="fingerprint">
+    Each value appears exactly once in the tree structure for efficient searching.
+  </Card>
+</CardGroup>
+
+## Use Cases
+
+General trees are ideal for representing:
+
+- **File Systems**: Directories and subdirectories
+- **Organization Charts**: Company hierarchies
+- **XML/HTML DOM**: Nested document structures
+- **AI Decision Trees**: Multi-branch decision making
+- **Family Trees**: Genealogical relationships
+- **Category Taxonomies**: Product classifications
+
+## Performance Optimization
+
+<Tip>
+  **Optimization Strategy**: Maintain a HashMap mapping values to nodes to reduce search operations from O(n) to O(1):
+  
+  ```java
+  private HashMap<Integer, Node> nodeMap = new HashMap<>();
+  ```
+  
+  This significantly improves performance for find, contains, and related operations.
+</Tip>
+
+## Interactive Visualizer
+
+<Card title="Explore General Trees" icon="play" href="https://dsvisualizer.isatvik.com/tree">
+  Use the interactive visualizer to build and explore general tree structures
+</Card>
+
+## Related Topics
+
+<CardGroup cols={2}>
+  <Card title="Binary Search Tree" icon="code-branch" href="/data-structures/binary-tree">
+    Learn about binary trees with two children per node
+  </Card>
+  <Card title="Tree Traversals" icon="arrows-split-up-and-left" href="/data-structures/tree-traversals">
+    Discover different methods to traverse tree structures
+  </Card>
+</CardGroup>

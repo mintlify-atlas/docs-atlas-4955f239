@@ -1,0 +1,321 @@
+---
+title: Priority Queue Visualizer
+description: Interactive visualization of priority queue data structure implemented using a max heap
+---
+
+# Priority Queue Visualizer
+
+Explore how priority queues use heap data structures to efficiently manage elements by priority, with automatic insertion and removal animations.
+
+<Card title="Try the Live Visualizer" icon="play" href="https://dsvisualizer.isatvik.com/priorityqueue">
+  Interact with the priority queue visualizer to see instant heap operations
+</Card>
+
+## What is a Priority Queue?
+
+A **priority queue** is an abstract data type where each element has an associated priority. Elements are dequeued in **priority order** rather than insertion order:
+
+<CardGroup cols={2}>
+  <Card title="High Priority First" icon="arrow-up">
+    Elements with higher priority values are removed before lower priority elements
+  </Card>
+  
+  <Card title="Efficient Operations" icon="gauge-high">
+    Both insertion and removal maintain O(log n) time complexity
+  </Card>
+</CardGroup>
+
+<Info>
+  Priority queues are fundamental to operating systems for **task scheduling**, where the kernel assigns CPU time based on process priorities.
+</Info>
+
+## Implementation with Heaps
+
+Priority queues are typically implemented using a **max heap** because:
+
+1. The highest priority element is always at the **root** (O(1) access)
+2. Insert operations maintain heap property through **bubble-up** (O(log n))
+3. Remove operations extract the root and **bubble-down** (O(log n))
+
+<Note>
+  A priority queue is essentially a **wrapper class** around a heap data structure. All core operations delegate to the underlying heap.
+</Note>
+
+## Why Use a Heap?
+
+Comparing different implementations:
+
+| Implementation | Insert | Remove Max | Get Max |
+|---------------|--------|------------|----------|
+| Unsorted Array | O(1) | O(n) | O(n) |
+| Sorted Array | O(n) | O(1) | O(1) |
+| **Heap** | **O(log n)** | **O(log n)** | **O(1)** |
+| BST | O(log n)* | O(log n)* | O(log n)* |
+
+*BST complexities can degrade to O(n) without balancing
+
+<Check>
+  Heaps provide the **best balance** of efficient insertion and removal operations.
+</Check>
+
+## Operations
+
+### Insert (Enqueue)
+
+Adding an element to the priority queue:
+
+<Steps>
+  <Step title="Delegate to Heap">
+    Call the underlying heap's insert method with the priority value.
+  </Step>
+  
+  <Step title="Automatic Heapify">
+    The heap automatically bubbles up the new element to maintain the heap property.
+  </Step>
+  
+  <Step title="Ready for Use">
+    The priority queue is immediately ready for the next operation.
+  </Step>
+</Steps>
+
+```java
+public void insert(int priority) {
+  heap.insert(priority);
+}
+```
+
+<Info>
+  **Time Complexity**: O(log n) - Inherited from heap insert operation
+</Info>
+
+### Remove (Dequeue)
+
+Extracting the highest priority element:
+
+<Steps>
+  <Step title="Access Root">
+    The highest priority element is always at the root of the max heap.
+  </Step>
+  
+  <Step title="Remove and Replace">
+    Remove the root and replace it with the last element.
+  </Step>
+  
+  <Step title="Restore Heap">
+    Bubble down the new root to restore the heap property.
+  </Step>
+</Steps>
+
+```java
+public void remove() {
+  heap.remove();
+}
+```
+
+<Info>
+  **Time Complexity**: O(log n) - Inherited from heap remove operation
+</Info>
+
+### Peek
+
+View the highest priority element without removing it:
+
+```java
+public int peek() {
+  return heap.peek();
+}
+```
+
+<Info>
+  **Time Complexity**: O(1) - Simply access the root element
+</Info>
+
+## Using the Visualizer
+
+The priority queue visualizer provides automatic, synchronized animations:
+
+<Steps>
+  <Step title="Insert with Priority">
+    Enter a priority value and click **Insert**. The element is automatically placed in the correct position.
+  </Step>
+  
+  <Step title="Watch Animation">
+    Unlike the heap visualizer, priority queue operations complete **automatically** - no manual stepping required.
+  </Step>
+  
+  <Step title="Remove Highest Priority">
+    Click **Remove** to extract and see the highest priority element removed with instant heapify animation.
+  </Step>
+  
+  <Step title="Clear Queue">
+    Use **Clean** to reset the priority queue to an empty state.
+  </Step>
+</Steps>
+
+<Note>
+  The visualizer shows the heap's **array representation**, making it easy to see how priorities are organized.
+</Note>
+
+## Visualizer vs Heap Visualizer
+
+<Tabs>
+  <Tab title="Priority Queue Visualizer">
+    - **Automatic operations**: Insert and remove complete instantly
+    - **Synchronized animations**: All heapify steps animate smoothly
+    - **Array view only**: Focus on the priority ordering
+    - **Simplified interface**: No manual stepping through operations
+    
+    Perfect for understanding how priority queues work in real applications.
+  </Tab>
+  
+  <Tab title="Heap Visualizer">
+    - **Step-by-step mode**: Manually advance through bubble-up/bubble-down
+    - **Tree and array views**: Toggle between visual representations
+    - **Educational focus**: See each swap in the heapify process
+    - **Manual control**: Click "Next Step" to advance operations
+    
+    Perfect for learning the internal mechanics of heap operations.
+  </Tab>
+</Tabs>
+
+## Implementation Structure
+
+The priority queue is implemented as a wrapper class:
+
+```java
+public class PriorityQueue {
+  // Max heap stores elements with highest priority at root
+  private Heap heap = new Heap();
+  
+  // Time: O(log n), Space: O(1)
+  public void insert(int priority) {
+    heap.insert(priority);
+  }
+  
+  // Time: O(1), Space: O(1)
+  public int peek() {
+    return heap.peek();
+  }
+  
+  // Time: O(log n), Space: O(1)
+  public void remove() {
+    heap.remove();
+  }
+  
+  // Time: O(n), Space: O(n)
+  @Override
+  public String toString() {
+    return heap.toString();
+  }
+}
+```
+
+<Warning>
+  This is a **simplified implementation** using a LinkedList-based heap. Production implementations typically use arrays for better performance.
+</Warning>
+
+## Time Complexity Summary
+
+<CardGroup cols={3}>
+  <Card title="Insert" icon="plus">
+    **O(log n)**
+    
+    Add with priority
+  </Card>
+  
+  <Card title="Remove" icon="minus">
+    **O(log n)**
+    
+    Extract highest priority
+  </Card>
+  
+  <Card title="Peek" icon="eye">
+    **O(1)**
+    
+    View highest priority
+  </Card>
+</CardGroup>
+
+## Real-World Applications
+
+<AccordionGroup>
+  <Accordion title="Operating System Task Scheduling">
+    The kernel uses priority queues to manage processes. Higher priority tasks (like system processes) get CPU time before lower priority user tasks.
+    
+    ```text
+    Priority Queue:
+    [System Task: 100] ← Runs first
+    [Important App: 75]
+    [Background Task: 25] ← Runs last
+    ```
+  </Accordion>
+  
+  <Accordion title="Dijkstra's Shortest Path Algorithm">
+    Priority queues efficiently select the next node with the smallest tentative distance in graph traversal.
+    
+    ```text
+    Priority Queue (by distance):
+    [Node A: distance 5]
+    [Node B: distance 12]
+    [Node C: distance 23]
+    ```
+  </Accordion>
+  
+  <Accordion title="Event-Driven Simulation">
+    Discrete event simulators use priority queues to process events in chronological order.
+    
+    ```text
+    Priority Queue (by timestamp):
+    [Customer arrives: t=10]
+    [Server finishes: t=15]
+    [Customer departs: t=20]
+    ```
+  </Accordion>
+  
+  <Accordion title="A* Pathfinding">
+    Game AI and navigation systems use priority queues to explore the most promising paths first based on heuristic costs.
+  </Accordion>
+  
+  <Accordion title="Load Balancing">
+    Distribute tasks to servers based on priority, ensuring critical requests are handled first.
+  </Accordion>
+</AccordionGroup>
+
+## Min Priority Queue
+
+For applications that need the **lowest priority first** (like finding shortest paths):
+
+<Note>
+  Simply use a **min heap** instead of a max heap. All operations remain the same, but the smallest element is at the root.
+</Note>
+
+```text
+Max Heap (High priority first):    Min Heap (Low priority first):
+       100                                 5
+      /   \                              /   \
+    75     50                          10     8
+   /  \                                / \
+  25   30                            15  20
+```
+
+## Related Visualizers
+
+<CardGroup cols={2}>
+  <Card title="Heap" icon="binary-tree" href="/data-structures/heap">
+    Learn the heap data structure that powers priority queues
+  </Card>
+  
+  <Card title="Queue" icon="list" href="/data-structures/queue">
+    Compare with standard FIFO queue behavior
+  </Card>
+</CardGroup>
+
+## Further Reading
+
+<Card title="Heap Visualizer" icon="book-open" href="/data-structures/heap">
+  For a detailed understanding of heap operations, visit the heap documentation page to see step-by-step bubble-up and bubble-down processes.
+</Card>
+
+<Card title="Interactive Priority Queue" icon="arrow-up-right-from-square" href="https://dsvisualizer.isatvik.com/priorityqueue">
+  Experience automatic heap operations with synchronized animations
+</Card>

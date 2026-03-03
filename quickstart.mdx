@@ -1,80 +1,266 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quickstart
+description: Get started with DS Visualizer in under 2 minutes and create your first interactive data structure visualization
 ---
 
-## Get started in three steps
+## Get your first visualization running
 
-Get your documentation site running locally and make your first customization.
+This guide will walk you through using DS Visualizer to understand data structures through interactive visualizations. You'll learn how to navigate the platform, perform operations, and toggle between code explanations and examples.
 
-### Step 1: Set up your local environment
-
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+<Steps>
+  <Step title="Visit DS Visualizer">
+    Open [dsvisualizer.isatvik.com](https://dsvisualizer.isatvik.com/) in your browser.
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+    You'll see the home page displaying the latest visualizers available. These include data structures like Stack, LinkedList, Queue, Binary Tree, Graph, Heap, and more.
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+    <Tip>
+      Each visualizer card shows the name and type (Visualizer or Algorithm) to help you find what you need quickly.
+    </Tip>
+  </Step>
 
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+  <Step title="Choose a visualizer">
+    Let's start with the **Stack** visualizer since it's one of the most fundamental data structures.
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    Click on the Stack card or navigate directly to [dsvisualizer.isatvik.com/stack](https://dsvisualizer.isatvik.com/stack).
+    
+    <Note>
+      Stacks are LIFO (Last In First Out) data structures, similar to a stack of books. The last element you add is the first one you remove.
+    </Note>
+  </Step>
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+  <Step title="Understand the interface">
+    When you land on the Stack visualizer, you'll see:
+    
+    - **Toggle button** (top-right corner): Switch between "Code" and "Example" views
+    - **Code explanation section**: Detailed breakdown of stack implementation with syntax highlighting
+    - **Complexity annotations**: Time and space complexity for each operation (O(1), O(n), etc.)
+    
+    The code section breaks down the implementation into digestible blocks, explaining:
+    - The stack data structure (using arrays)
+    - Push operation (adding elements)
+    - Pop operation (removing elements)
+    - Peek operation (viewing the top element)
+    - isEmpty check
+  </Step>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+  <Step title="Toggle to the example view">
+    Click the **"Example"** button in the top-right corner to switch to the practical example view.
+    
+    You'll now see a bracket matching example that demonstrates a real-world stack application. This shows how stacks are used to validate balanced parentheses in code - a common problem in compilers and text editors.
+    
+    <Tip>
+      The example view helps you understand how data structures are used in practical scenarios, not just theoretical concepts.
+    </Tip>
+  </Step>
 
-### Step 3: Go live
+  <Step title="Try the LinkedList visualizer">
+    Now let's explore a more interactive visualizer. Navigate to [dsvisualizer.isatvik.com/linkedlist](https://dsvisualizer.isatvik.com/linkedlist).
+    
+    The LinkedList visualizer includes:
+    
+    - **Visual representation** of nodes with arrows showing connections
+    - **Head and tail pointers** clearly marked
+    - **Null node** at the end to show list termination
+    - **Interactive controls** to manipulate the list
+  </Step>
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+  <Step title="Perform operations">
+    The LinkedList visualizer provides input fields and operation buttons:
+    
+    ### Input fields
+    - **Enter the Value**: The number you want to add to the list
+    - **Enter the index**: Position for insertion or removal
+    
+    ### Available operations
+    
+    <AccordionGroup>
+      <Accordion title="Add First" icon="arrow-left">
+        Adds a new node at the beginning of the list. The new node becomes the head, and its `next` pointer references the previous head.
+        
+        **Time complexity**: O(1) - constant time operation
+      </Accordion>
+      
+      <Accordion title="Add Last" icon="arrow-right">
+        Adds a new node at the end of the list. The current tail's `next` pointer is updated to reference the new node, which becomes the new tail.
+        
+        **Time complexity**: O(1) - constant time operation when tail reference is maintained
+      </Accordion>
+      
+      <Accordion title="Insert At" icon="location-arrow">
+        Inserts a node at a specific index. Traverses to index-1, updates pointers to insert the new node while maintaining the chain.
+        
+        **Time complexity**: O(n) - requires traversal to the specified position
+      </Accordion>
+      
+      <Accordion title="Remove First" icon="trash">
+        Removes the head node by updating the head pointer to reference the second node.
+        
+        **Time complexity**: O(1) - constant time operation
+      </Accordion>
+      
+      <Accordion title="Remove Last" icon="trash">
+        Removes the tail node by traversing to the second-to-last node and updating its `next` pointer to null.
+        
+        **Time complexity**: O(n) - requires traversal to find the second-to-last node
+      </Accordion>
+      
+      <Accordion title="Remove At" icon="x">
+        Removes a node at a specific index by traversing to index-1 and updating pointers to skip the target node.
+        
+        **Time complexity**: O(n) - requires traversal to the specified position
+      </Accordion>
+    </AccordionGroup>
+  </Step>
+
+  <Step title="Watch the animations">
+    Try these operations and watch the animations:
+    
+    1. **Enter value 10** and click **"Add First"**
+       - A node appears with "head" and "tail" labels (since it's the only node)
+    
+    2. **Enter value 20** and click **"Add Last"**
+       - Node 10 now shows only "head"
+       - Node 20 appears on the right with "tail"
+       - An arrow connects them
+    
+    3. **Enter value 15** and **index 1**, click **"Insert At"**
+       - Node 15 slides into position between 10 and 20
+       - Arrows automatically update to show the new connections
+    
+    4. **Click "Remove First"**
+       - Node 10 fades away
+       - Node 15 becomes the new head
+    
+    <Note>
+      All animations are powered by Framer Motion, providing smooth transitions that help you visualize how pointers change during operations.
+    </Note>
+  </Step>
+
+  <Step title="Toggle to code view">
+    Click the **"Code"** button in the top-right corner to see the implementation.
+    
+    You'll find detailed explanations of:
+    
+    - **Node class**: How individual nodes store values and next pointers
+    - **addFirst() method**: Implementation with complexity analysis
+    - **addLast() method**: Implementation with complexity analysis
+    - **addAt() method**: Index validation and pointer manipulation
+    - **removeFirst() method**: Handling edge cases (empty list, single node)
+    - **removeLast() method**: Traversal to second-to-last node
+    - **removeAt() method**: Index-based removal logic
+    
+    Each code block includes:
+    - **Syntax highlighting** for easy reading
+    - **Time complexity** notation (O(1), O(n))
+    - **Space complexity** when relevant
+    - **Explanations** of why the complexity is what it is
+  </Step>
+</Steps>
+
+## Explore more visualizers
+
+Now that you understand how to use DS Visualizer, explore other data structures and algorithms:
+
+<CardGroup cols={2}>
+  <Card
+    title="Queue"
+    icon="arrow-right"
+    href="https://dsvisualizer.isatvik.com/queue"
+  >
+    Learn FIFO (First In First Out) operations with enqueue and dequeue
+  </Card>
+  <Card
+    title="Binary Tree"
+    icon="code-branch"
+    href="https://dsvisualizer.isatvik.com/binarytree"
+  >
+    Insert nodes and calculate tree height and node distances
+  </Card>
+  <Card
+    title="Graph"
+    icon="project-diagram"
+    href="https://dsvisualizer.isatvik.com/graph"
+  >
+    Build graph structures and visualize connections between vertices
+  </Card>
+  <Card
+    title="Heap"
+    icon="sort-amount-up"
+    href="https://dsvisualizer.isatvik.com/heap"
+  >
+    Explore min and max heap properties with heap operations
+  </Card>
+  <Card
+    title="Tree Traversals"
+    icon="route"
+    href="https://dsvisualizer.isatvik.com/treetraversals"
+  >
+    Visualize in-order, pre-order, and post-order traversal animations
+  </Card>
+  <Card
+    title="Graph Traversals"
+    icon="route"
+    href="https://dsvisualizer.isatvik.com/graphtraversals"
+  >
+    Watch BFS and DFS algorithms explore graph structures
+  </Card>
+  <Card
+    title="Hash Map"
+    icon="hashtag"
+    href="https://dsvisualizer.isatvik.com/hashmap"
+  >
+    Understand key-value storage with hash functions
+  </Card>
+  <Card
+    title="Priority Queue"
+    icon="sort"
+    href="https://dsvisualizer.isatvik.com/priorityqueue"
+  >
+    See how elements are ordered by priority, not insertion time
+  </Card>
+</CardGroup>
+
+## Tips for effective learning
+
+<CardGroup cols={1}>
+  <Card title="Start with fundamentals" icon="1">
+    Begin with Stack and LinkedList before moving to complex structures like Binary Trees and Graphs. This builds a strong foundation.
+  </Card>
+  
+  <Card title="Use both views" icon="toggle-on">
+    Toggle between code explanations and examples. The code view teaches implementation details, while examples show practical applications.
+  </Card>
+  
+  <Card title="Experiment freely" icon="flask">
+    Try different values and operations. The visualizations update in real-time, making it safe to experiment and learn through exploration.
+  </Card>
+  
+  <Card title="Focus on complexity" icon="chart-line">
+    Pay attention to time and space complexity annotations. Understanding performance characteristics is crucial for choosing the right data structure.
+  </Card>
+  
+  <Card title="Follow the animations" icon="eye">
+    Watch how pointers change, nodes move, and structures reorganize. The animations reveal the mechanics behind each operation.
+  </Card>
+</CardGroup>
+
+<Tip>
+  DS Visualizer is designed for university courses with 100+ students. If you're using it for a course, encourage students to explore different operations and compare complexity across data structures.
+</Tip>
 
 ## Next steps
 
-Now that you have your docs running, explore these key features:
+You now know how to:
+- Navigate the DS Visualizer platform
+- Perform operations on data structures
+- Toggle between code explanations and examples
+- Watch animations that reveal how operations work
+- Read complexity analysis for each method
 
-<CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
+<Card
+  title="Explore all visualizers"
+  icon="compass"
+  href="https://dsvisualizer.isatvik.com/"
+>
+  Visit the home page to browse the complete collection of data structures and algorithms
 </Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
-</CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

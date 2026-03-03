@@ -1,0 +1,375 @@
+---
+title: Tree Traversals
+description: Interactive visualizations of tree traversal algorithms including preorder, inorder, postorder, and level-order traversals
+---
+
+# Tree Traversals
+
+Tree traversal algorithms systematically visit every node in a tree data structure. Different traversal methods visit nodes in different orders, each serving specific use cases in tree processing.
+
+<Note>
+  Try the interactive visualizer: [Tree Traversals Visualizer](https://dsvisualizer.isatvik.com/treetraversals)
+</Note>
+
+## Traversal Categories
+
+Tree traversals are classified into two main categories:
+
+<CardGroup cols={2}>
+  <Card title="Depth-First Traversals" icon="arrow-down">
+    Explore as far as possible along each branch before backtracking. Includes preorder, inorder, and postorder.
+  </Card>
+  
+  <Card title="Breadth-First Traversal" icon="arrows-left-right">
+    Visit all nodes at the same level before moving to the next level. Also called level-order traversal.
+  </Card>
+</CardGroup>
+
+## Depth-First Traversals
+
+<Tabs>
+  <Tab title="Preorder">
+    ### Preorder Traversal
+
+    **Order: Parent → Left → Right**
+
+    Visits the parent node first, then recursively traverses the left subtree, followed by the right subtree.
+
+    ```java
+public void preOrderTraversal() {
+    preOrderTraversal(root);
+}
+
+private void preOrderTraversal(Node root) {
+    if (root == null)
+        return;
+    
+    System.out.println(root.value);
+    preOrderTraversal(root.leftChild);
+    preOrderTraversal(root.rightChild);
+}
+    ```
+
+    **Time Complexity:** O(n) - visits each node once
+    
+    **Space Complexity:** O(h) - recursive call stack, where h is height
+
+    **Use Cases:**
+    - Creating a copy of the tree
+    - Prefix expression evaluation
+    - Tree serialization
+    - Directory listing (visit folder before contents)
+
+    <Tip>
+      Preorder traversal is useful when you need to process parent nodes before their children, such as when copying a tree structure.
+    </Tip>
+  </Tab>
+
+  <Tab title="Inorder">
+    ### Inorder Traversal
+
+    **Order: Left → Parent → Right**
+
+    Recursively traverses the left subtree, visits the parent node, then traverses the right subtree.
+
+    ```java
+public void inOrderTraversal() {
+    inOrderTraversal(root);
+}
+
+private void inOrderTraversal(Node root) {
+    if (root == null)
+        return;
+    
+    inOrderTraversal(root.leftChild);
+    System.out.println(root.value);
+    inOrderTraversal(root.rightChild);
+}
+    ```
+
+    **Time Complexity:** O(n)
+    
+    **Space Complexity:** O(h)
+
+    **Use Cases:**
+    - Getting sorted sequence from BST
+    - Expression tree evaluation (infix expressions)
+    - Binary search tree validation
+
+    <Note>
+      For Binary Search Trees, inorder traversal visits nodes in ascending sorted order.
+    </Note>
+  </Tab>
+
+  <Tab title="Postorder">
+    ### Postorder Traversal
+
+    **Order: Left → Right → Parent**
+
+    Recursively traverses the left subtree, then the right subtree, and finally visits the parent node.
+
+    ```java
+public void postOrderTraversal() {
+    postOrderTraversal(root);
+}
+
+private void postOrderTraversal(Node root) {
+    if (root == null)
+        return;
+    
+    postOrderTraversal(root.leftChild);
+    postOrderTraversal(root.rightChild);
+    System.out.println(root.value);
+}
+    ```
+
+    **Time Complexity:** O(n)
+    
+    **Space Complexity:** O(h)
+
+    **Use Cases:**
+    - Deleting the tree (delete children before parent)
+    - Postfix expression evaluation
+    - Calculating directory sizes (process contents before folder)
+    - Tree destruction
+
+    <Warning>
+      Postorder is essential for safe tree deletion since children must be freed before their parent.
+    </Warning>
+  </Tab>
+</Tabs>
+
+## Breadth-First Traversal
+
+### Level-Order Traversal
+
+Level-order traversal visits nodes level by level from top to bottom, left to right. It uses a queue data structure to track nodes at each level.
+
+```java
+public void levelOrder() {
+    if (root == null)
+        return;
+    
+    Queue<Node> visited = new LinkedList<Node>();
+    visited.add(root);
+    
+    while (!visited.isEmpty()) {
+        Node current = visited.poll();
+        System.out.println(current.value);
+        
+        if (current.leftChild != null)
+            visited.add(current.leftChild);
+        
+        if (current.rightChild != null)
+            visited.add(current.rightChild);
+    }
+}
+```
+
+**Time Complexity:** O(n) - visits each node once
+
+**Space Complexity:** O(w) - where w is the maximum width of the tree
+
+### Algorithm Walkthrough
+
+<Steps>
+  <Step title="Initialize Queue">
+    Start with the root node in the queue
+    ```
+    visited = [2]
+    ```
+  </Step>
+  
+  <Step title="Process Current Level">
+    Dequeue the current node and enqueue its children
+    ```
+    current = 2
+    visited = [1, 3]
+    ```
+  </Step>
+  
+  <Step title="Continue Until Empty">
+    Repeat until the queue is empty, processing each level
+    ```
+    Process: 2 → 1 → 3 → 0 → 1 → 3 → 3
+    ```
+  </Step>
+</Steps>
+
+**Use Cases:**
+- Finding shortest path in unweighted trees
+- Level-wise processing
+- Finding all nodes at distance k
+- Serialization for complete trees
+- Printing tree level by level
+
+<Tip>
+  Level-order traversal is the only traversal that requires O(w) extra space for the queue, while depth-first traversals use O(h) stack space.
+</Tip>
+
+## Traversal Comparison
+
+<Accordion title="Visual Comparison">
+  Consider this binary tree:
+  ```
+        10
+      /    \
+     4      15
+    / \    /  \
+   2   8  12  20
+  ```
+
+  **Preorder:** 10 → 4 → 2 → 8 → 15 → 12 → 20
+  
+  **Inorder:** 2 → 4 → 8 → 10 → 12 → 15 → 20 (sorted!)
+  
+  **Postorder:** 2 → 8 → 4 → 12 → 20 → 15 → 10
+  
+  **Level-order:** 10 → 4 → 15 → 2 → 8 → 12 → 20
+</Accordion>
+
+## Traversal Implementation in Visualizer
+
+The visualizer implements all traversals with visual animations:
+
+```typescript
+// Preorder traversal with visual feedback
+const preOrder = async (node: Node<any> | null) => {
+    if (!node) return;
+    await popUp(node);  // Visual highlight
+    await preOrder(node.left);
+    await preOrder(node.right);
+};
+
+// Inorder traversal
+const inOrder = async (node: Node<any> | null) => {
+    if (!node) return;
+    await inOrder(node.left);
+    await popUp(node);  // Visual highlight
+    await inOrder(node.right);
+};
+
+// Postorder traversal
+const postOrder = async (node: Node<any> | null) => {
+    if (!node) return;
+    await postOrder(node.left);
+    await postOrder(node.right);
+    await popUp(node);  // Visual highlight
+};
+
+// Level-order traversal
+const levelOrder = async (node: Node<any> | null) => {
+    if (!node) return;
+    const queue: Node<any>[] = [];
+    queue.push(node);
+    
+    while (queue.length) {
+        const current = queue.shift()!;
+        await popUp(current);  // Visual highlight
+        if (current?.left) queue.push(current.left);
+        if (current?.right) queue.push(current.right);
+    }
+};
+```
+
+## Helper Methods
+
+<AccordionGroup>
+  <Accordion title="Find Minimum">
+    ### Finding Minimum Value
+
+    In a BST, the minimum value is always at the leftmost node.
+
+    ```java
+int findMin() {
+    if (root == null)
+        throw new RuntimeException("No root in the tree");
+    
+    Node current = root;
+    while (current.leftChild != null)
+        current = current.leftChild;
+    
+    return current.value;
+}
+    ```
+
+    **Time Complexity:** O(h) where h is height
+    
+    **Space Complexity:** O(1)
+  </Accordion>
+
+  <Accordion title="Contains Check">
+    ### Checking for Value
+
+    Recursively search for a value in the tree.
+
+    ```java
+Boolean contains(int value) {
+    return contains(root, value);
+}
+
+private Boolean contains(Node node, int value) {
+    if (node == null)
+        return false;
+    
+    if (node.value == value)
+        return true;
+    
+    if (value < node.value)
+        return contains(node.leftChild, value);
+    else
+        return contains(node.rightChild, value);
+}
+    ```
+
+    **Time Complexity:** O(h) for BST, O(n) for general tree
+    
+    **Space Complexity:** O(h) - recursion stack
+  </Accordion>
+</AccordionGroup>
+
+## Interactive Visualizer Features
+
+The tree traversals visualizer includes:
+
+<CardGroup cols={2}>
+  <Card title="Pre-built Tree" icon="tree">
+    Starts with a sample tree (10, 15, 12, 20, 4, 8, 2) for immediate experimentation
+  </Card>
+  
+  <Card title="Insert Values" icon="plus">
+    Add your own values to customize the tree structure
+  </Card>
+  
+  <Card title="All Traversals" icon="diagram-project">
+    Buttons for Preorder, Inorder, Postorder, and Level-Order with animated visualization
+  </Card>
+  
+  <Card title="Clear Tree" icon="trash">
+    Reset the tree to start over with new structures
+  </Card>
+</CardGroup>
+
+<Card title="See Traversals in Action" icon="play" href="https://dsvisualizer.isatvik.com/treetraversals">
+  Watch how different traversal algorithms visit nodes in the interactive visualizer
+</Card>
+
+## Choosing the Right Traversal
+
+| Traversal | Best For | Avoid When |
+|-----------|----------|------------|
+| **Preorder** | Copying trees, prefix expressions | Need sorted order |
+| **Inorder** | BST sorted output, expression evaluation | Need to process parents first |
+| **Postorder** | Deleting trees, postfix expressions | Need to process parents first |
+| **Level-order** | Shortest paths, level-wise operations | Memory constrained (wide trees) |
+
+## Related Topics
+
+<CardGroup cols={2}>
+  <Card title="Binary Search Tree" icon="binary" href="/data-structures/binary-tree">
+    Understand the structure being traversed
+  </Card>
+  <Card title="General Tree" icon="sitemap" href="/data-structures/tree">
+    Explore trees with variable children
+  </Card>
+</CardGroup>

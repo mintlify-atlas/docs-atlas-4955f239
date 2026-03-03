@@ -1,0 +1,412 @@
+---
+title: LinkedList Visualizer
+description: Interactive visualization of the LinkedList data structure with comprehensive operations including addFirst, addLast, addAt, removeFirst, removeLast, and removeAt
+---
+
+The LinkedList visualizer provides an interactive way to understand how the LinkedList data structure works. Unlike arrays, LinkedLists store elements as nodes where each element points to the next element's memory location.
+
+<Info>
+  Try the live visualizer at [dsvisualizer.isatvik.com/linkedlist](https://dsvisualizer.isatvik.com/linkedlist)
+</Info>
+
+## What is a LinkedList?
+
+LinkedList is a data structure similar to an array, but each element is connected to the next element by a pointer. In LinkedLists, the elements are called nodes.
+
+A visual representation of an Integer LinkedList:
+
+```
+1 -> 2 -> 3 -> 4 -> null
+```
+
+Each element is a node data structure, and each node points to the next node.
+
+### Node Structure
+
+```
+Node {
+  value: integer,
+  next: location of the next node in heap memory
+}
+```
+
+<Note>
+  Since each Node is a custom data type unknown at compile time, nodes are stored in heap memory. High-level languages have garbage collectors, so memory management is handled automatically.
+</Note>
+
+## Interactive Controls
+
+The visualizer provides six main operations you can perform:
+
+<Tabs>
+  <Tab title="Add First">
+    Adds a node at the beginning of the list.
+    
+    **How to use:**
+    1. Enter a value in the input field
+    2. Click the "Add First" button
+    3. Watch the node appear at the head position
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Add Last">
+    Adds a node at the end of the list.
+    
+    **How to use:**
+    1. Enter a value in the input field
+    2. Click the "Add Last" button
+    3. Watch the node appear at the tail position
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Add At">
+    Inserts a node at a specific index position.
+    
+    **How to use:**
+    1. Enter an index and value
+    2. Click the "Add At" button
+    3. Watch the node appear at the specified position
+    
+    **Time Complexity:** O(n)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Remove First">
+    Removes the first node from the list.
+    
+    **How to use:**
+    1. Click the "Remove First" button
+    2. Watch the head node disappear
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Remove Last">
+    Removes the last node from the list.
+    
+    **How to use:**
+    1. Click the "Remove Last" button
+    2. Watch the tail node disappear
+    
+    **Time Complexity:** O(n)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Remove At">
+    Removes a node at a specific index position.
+    
+    **How to use:**
+    1. Enter an index
+    2. Click the "Remove At" button
+    3. Watch the node at that position disappear
+    
+    **Time Complexity:** O(n)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+</Tabs>
+
+## Implementation Details
+
+The visualizer uses a two-pointer approach with `head` and `tail` pointers:
+
+```java LinkedList.java
+class LinkedList {
+    class Node {
+        int value;
+        Node next = null;
+        
+        public Node(int value) {
+            this.value = value;
+        }
+    }
+    
+    private Node head = null;
+    private Node tail = null;
+    private int length = 0;
+    
+    public void addFirst(int value) {}
+    public void addLast(int value) {}
+    public void insertAt(int index, int value) {}
+    public void removeFirst() {}
+    public void removeLast() {}
+    public void remove(int index) {}
+}
+```
+
+### Key Variables
+
+- **head** - Pointer to the first node in the list
+- **tail** - Pointer to the last node in the list
+- **length** - Tracks the number of nodes (improves `size()` from O(n) to O(1))
+
+<Note>
+  The length variable is optional but improves performance by tracking size in constant time.
+</Note>
+
+## Core Operations
+
+<Steps>
+  <Step title="Add First">
+    Adds a node at the beginning of the list.
+    
+    ```java addFirst.java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public void addFirst(int value) {
+        length++;
+        Node node = new Node(value);
+        
+        if (this.head == null) {
+            this.head = this.tail = node;
+            return;
+        }
+        
+        node.next = head;
+        head = node;
+        
+        // Node(0) 1 -> 2
+        // 0 -> 1 -> 2
+    }
+    ```
+    
+    If there's no linked list (head is null), both head and tail point to the new node. Otherwise, link the new node to the current head and update the head pointer.
+  </Step>
+  
+  <Step title="Add Last">
+    Adds a node at the end of the list.
+    
+    ```java addLast.java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public void addLast(int value) {
+        Node node = new Node(value);
+        length++;
+        
+        if (this.head == null) {
+            this.head = this.tail = node;
+            return;
+        }
+        
+        tail.next = node;
+        tail = tail.next;
+        
+        // 1 -> 2 0
+        // 1 -> 2 -> 0
+    }
+    ```
+    
+    Since we have a tail pointer, we can directly add to the end in O(1) time!
+  </Step>
+  
+  <Step title="Insert At Index">
+    Inserts a node at a specific position.
+    
+    ```java insertAt.java
+    /*
+     * Time: O(n)
+     * Space: O(1)
+     */
+    public void insertAt(int index, int value) {
+        if (index > length || index < 0)
+            return;
+        
+        if (index == 0) {
+            addFirst(value);
+            return;
+        }
+        
+        if (index == length) {
+            addLast(value);
+            return;
+        }
+        
+        length++;
+        Node current = head;
+        Node node = new Node(value);
+        
+        // Iterate to the node before insertion point
+        for (int i = 0; i < index - 1; i++) {
+            current = current.next;
+        }
+        
+        Node temp = current.next;
+        current.next = node;
+        node.next = temp;
+        
+        // 1 -> 2 -> 3 -> 4
+        // Insert 5 at index 2
+        // 1 -> 2 -> 5 -> 3 -> 4
+    }
+    ```
+    
+    <Info>
+      Edge case optimization: If inserting at index 0 or at the end, use addFirst/addLast for O(1) performance instead of O(n).
+    </Info>
+  </Step>
+  
+  <Step title="Remove First">
+    Removes the first node from the list.
+    
+    ```java removeFirst.java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public void removeFirst() {
+        if (head == null)
+            return;
+        
+        length--;
+        head = head.next;
+        
+        // 1 -> 2 -> 3
+        // Simply move head to the next node
+        // 2 -> 3
+    }
+    ```
+    
+    Just update the head pointer to point to the second node.
+  </Step>
+  
+  <Step title="Remove Last">
+    Removes the last node from the list.
+    
+    ```java removeLast.java
+    /*
+     * Time: O(n)
+     * Space: O(1)
+     */
+    public void removeLast() {
+        if (head == null)
+            return;
+        
+        length--;
+        
+        if (head.next == null) {
+            head = tail = null;
+            return;
+        }
+        
+        Node current = head;
+        while (current.next.next != null) {
+            current = current.next;
+        }
+        
+        current.next = null;
+        tail = current;
+        
+        // 1 -> 2 -> 3
+        // Iterate to second-to-last node
+        // Set its next to null
+        // 1 -> 2
+    }
+    ```
+    
+    <Note>
+      We must iterate to the second-to-last node because we can't traverse backwards in a singly linked list.
+    </Note>
+  </Step>
+  
+  <Step title="Remove At Index">
+    Removes a node at a specific position.
+    
+    ```java remove.java
+    /*
+     * Time: O(n)
+     * Space: O(1)
+     */
+    public void remove(int index) {
+        if (index >= length || index < 0)
+            return;
+        
+        if(index == 0) {
+            removeFirst();
+            return;
+        }
+        
+        if(index == length-1) {
+            removeLast();
+            return;
+        }
+        
+        Node current = head;
+        
+        for (int i = 0; i < index - 1; i++) {
+            current = current.next;
+        }
+        
+        current.next = current.next.next;
+        length--;
+        
+        // 1 -> 2 -> 3 -> 4
+        // Remove index 2
+        // 1 -> 2 -> 4
+    }
+    ```
+  </Step>
+</Steps>
+
+## Visualization Features
+
+The interactive visualizer shows:
+
+- **Head marker**: Labels the first node
+- **Tail marker**: Labels the last node
+- **Arrows**: Visual connection between nodes
+- **Null terminator**: Shows the end of the list
+- **Animations**: Smooth transitions when adding or removing nodes
+
+## Performance Summary
+
+| Operation    | Time Complexity | Space Complexity | Notes                                    |
+|--------------|----------------|------------------|------------------------------------------|
+| addFirst     | O(1)           | O(1)             | Direct access via head pointer           |
+| addLast      | O(1)           | O(1)             | Direct access via tail pointer           |
+| insertAt     | O(n)           | O(1)             | Must traverse to insertion point         |
+| removeFirst  | O(1)           | O(1)             | Direct access via head pointer           |
+| removeLast   | O(n)           | O(1)             | Must traverse to second-to-last node     |
+| removeAt     | O(n)           | O(1)             | Must traverse to target position         |
+
+<Info>
+  Operations at the head are O(1), but operations requiring traversal are O(n). This is the fundamental trade-off of singly linked lists!
+</Info>
+
+## LinkedList vs Array
+
+| Feature              | LinkedList | Array |
+|---------------------|-----------|-------|
+| Random Access       | O(n)      | O(1)  |
+| Insert at Beginning | O(1)      | O(n)  |
+| Insert at End       | O(1)      | O(1)* |
+| Memory Usage        | More      | Less  |
+| Cache Performance   | Poor      | Good  |
+
+*Amortized for dynamic arrays
+
+## Use Cases
+
+LinkedLists are ideal for:
+
+- **Frequent insertions/deletions**: Especially at the beginning
+- **Unknown size**: No need to pre-allocate memory
+- **Implementing other structures**: Stacks, queues, and graphs
+- **Undo functionality**: Each node can represent a state
+
+<Note>
+  Use arrays when you need fast random access. Use LinkedLists when you need frequent insertions/deletions at the beginning.
+</Note>

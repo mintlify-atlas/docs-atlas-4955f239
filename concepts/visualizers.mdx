@@ -1,0 +1,483 @@
+---
+title: 'Interactive Visualizers'
+description: 'How DS Visualizer brings data structures to life with animations and real-time interactions'
+---
+
+The interactive visualizers are the heart of DS Visualizer. They transform abstract data structure operations into visual, animated experiences that make learning intuitive and engaging.
+
+## Available Visualizers
+
+DS Visualizer currently includes visualizers for:
+
+<CardGroup cols={3}>
+  <Card title="Stack" icon="layer-group">
+    LIFO structure with push, pop, and peek operations
+  </Card>
+  <Card title="Queue" icon="arrow-right">
+    FIFO structure with enqueue and dequeue operations
+  </Card>
+  <Card title="LinkedList" icon="link">
+    Singly-linked list with insertion and deletion at any position
+  </Card>
+  <Card title="Binary Tree" icon="tree">
+    Binary search tree with insertion and traversal
+  </Card>
+  <Card title="Heap" icon="chart-pyramid">
+    Min/max heap with heapify operations
+  </Card>
+  <Card title="HashMap" icon="hashtag">
+    Hash table with collision handling
+  </Card>
+  <Card title="HashSet" icon="set">
+    Set implementation with hash-based storage
+  </Card>
+  <Card title="Priority Queue" icon="ranking-star">
+    Queue with priority-based ordering
+  </Card>
+  <Card title="Graph" icon="diagram-project">
+    Graph representation and traversal algorithms
+  </Card>
+</CardGroup>
+
+## Visualizer Features
+
+Every visualizer is built with consistent, intuitive features:
+
+### Control Panel
+
+Each visualizer includes an `OptionBackground` component with:
+
+<Tabs>
+  <Tab title="Input Fields">
+    **Text inputs** for entering values:
+    
+    ```tsx
+    <Input ref={inputRef} content="Enter the value you want to add:" />
+    ```
+    
+    - Auto-focus on page load
+    - Integer validation (for numeric data structures)
+    - Clear after submission
+    - Custom validation per data structure (e.g., bracket-only input for stack examples)
+  </Tab>
+  
+  <Tab title="Action Buttons">
+    **Operation buttons** specific to each data structure:
+    
+    **Stack Operations:**
+    - `Push` - Add element to top
+    - `Pop` - Remove top element
+    - `Empty` - Clear entire stack
+    
+    **LinkedList Operations:**
+    - `Add First` - Insert at head
+    - `Add Last` - Insert at tail
+    - `Add At` - Insert at index
+    - `Remove First` - Delete head
+    - `Remove Last` - Delete tail
+    - `Remove At` - Delete at index
+    
+    **Binary Tree Operations:**
+    - `Insert` - Add node in correct BST position
+  </Tab>
+  
+  <Tab title="Form Handling">
+    Forms prevent page reload and handle submission elegantly:
+    
+    ```tsx
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        insert(parseInt(inputRef.current?.value || "0"), root, renderTree);
+        inputRef.current!.value = "";
+      }}
+    >
+    ```
+    
+    - Prevents default browser behavior
+    - Validates input before processing
+    - Clears input after successful operation
+  </Tab>
+</Tabs>
+
+### Animation System
+
+DS Visualizer uses **Framer Motion** to create smooth, meaningful animations:
+
+<AccordionGroup>
+  <Accordion title="AnimatePresence">
+    Handles enter and exit animations for dynamic elements:
+    
+    ```tsx
+    <AnimatePresence>
+      {stack}
+    </AnimatePresence>
+    ```
+    
+    **What it does:**
+    - Animates elements when they're added to the array
+    - Animates elements when they're removed
+    - Waits for exit animations to complete before unmounting
+    
+    **Example:** When you pop from a stack, the top element fades out and slides up before disappearing.
+  </Accordion>
+  
+  <Accordion title="AnimateSharedLayout">
+    Creates smooth layout transitions when elements reposition:
+    
+    ```tsx
+    <AnimateSharedLayout>
+      <AnimatePresence>{nodes}</AnimatePresence>
+    </AnimateSharedLayout>
+    ```
+    
+    **What it does:**
+    - Tracks position changes of elements
+    - Animates smooth movement between old and new positions
+    - Maintains visual continuity during reordering
+    
+    **Example:** When you insert a node in the middle of a linked list, all subsequent nodes smoothly slide to make room.
+  </Accordion>
+  
+  <Accordion title="Motion Components">
+    Individual elements wrapped in `motion.div` for custom animations:
+    
+    ```tsx
+    <motion.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.8 }}
+      transition={{ duration: 0.3 }}
+    >
+      {value}
+    </motion.div>
+    ```
+    
+    **Common animation patterns:**
+    - **Scale:** Elements grow in when added, shrink when removed
+    - **Opacity:** Fade in/out for smooth appearance changes
+    - **Position:** Slide movements for insertions and deletions
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+  All animations are designed to be **meaningful** - they help you understand *what* is happening to the data structure, not just provide visual flair.
+</Info>
+
+### Visual Indicators
+
+Each visualizer includes helpful visual cues:
+
+#### Stack Visualizer
+
+```tsx
+<motion.div
+  className="flex flex-col-reverse items-center mt-10 px-3 py-3 
+             border-2 border-purple-500 border-t-0 min-h-[0.8rem] w-28"
+>
+  <AnimateSharedLayout>
+    <AnimatePresence>{stack}</AnimatePresence>
+  </AnimateSharedLayout>
+</motion.div>
+<div className="text-gray-300">
+  Count: <span className="text-white">{stack.length}</span>
+</div>
+```
+
+**Features:**
+- `flex-col-reverse` - Stack grows upward (new items at top)
+- Purple border - Represents stack container
+- No top border - Shows stack is "open" at the top
+- Count display - Shows current number of elements
+
+#### LinkedList Visualizer
+
+```tsx
+<div className="flex space-x-3 overflow-hidden">
+  <AnimateSharedLayout>
+    <AnimatePresence>{nodes}</AnimatePresence>
+  </AnimateSharedLayout>
+</div>
+```
+
+**Features:**
+- Horizontal layout - Nodes arranged left to right
+- Arrow indicators - Show pointer connections
+- `head` and `tail` labels - Mark special positions
+- Null node - Visual terminator at the end
+
+#### Binary Tree Visualizer
+
+```tsx
+<div className="w-screen min-h-[50vh] overflow-hidden flex justify-center pt-20">
+  <AnimateSharedLayout>{tree}</AnimateSharedLayout>
+</div>
+```
+
+**Features:**
+- Hierarchical positioning - Parent nodes above children
+- Line connections - Show parent-child relationships
+- Automatic balancing - Layout adjusts based on tree structure
+- Center alignment - Root node always centered
+
+### Node Rendering
+
+Each data structure defines a `Node` class with a `render()` method:
+
+<CodeGroup>
+```tsx Stack Node
+class Node {
+  value: number;
+  
+  constructor(value: number) {
+    this.value = value;
+  }
+  
+  render(): JSX.Element {
+    return (
+      <motion.div
+        key={Math.random()}
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        exit={{ opacity: 0, scale: 0.8 }}
+        className="bg-purple-500 text-white px-4 py-2 rounded"
+      >
+        {this.value}
+      </motion.div>
+    );
+  }
+}
+```
+
+```tsx LinkedList Node
+class Node {
+  value: number;
+  next: Node | null = null;
+  label: string = "";
+  
+  addText(text: string) {
+    this.label = text;
+  }
+  
+  render(): JSX.Element {
+    return (
+      <motion.div layout className="flex flex-col items-center">
+        <div className="text-xs text-gray-400">{this.label}</div>
+        <div className="bg-blue-500 text-white px-4 py-2 rounded">
+          {this.value}
+        </div>
+        {this.next && <span className="text-gray-300">→</span>}
+      </motion.div>
+    );
+  }
+}
+```
+</CodeGroup>
+
+<Note>
+  The `render()` method returns fully-formed JSX with Framer Motion animations. This encapsulates both the data and its visual representation.
+</Note>
+
+## State Management
+
+Visualizers use React hooks to manage state:
+
+### Custom Hooks Pattern
+
+```tsx
+const useStack = () => {
+  const [stack, setStack] = useState<Array<JSX.Element>>([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [emptyStack, setEmptyStack] = useState<boolean>(false);
+
+  const push = (value: number) => {
+    const node = new Node(value);
+    setStack((prev) => [...prev, node.render()]);
+  };
+
+  const pop = () => {
+    const nodes = stack.slice(0, -1);
+    setStack(() => nodes);
+  };
+
+  const empty = () => {
+    setEmptyStack(true);
+  };
+  
+  return { stack, methods: { push, pop, empty }, refs: { inputRef } };
+};
+```
+
+**Why this pattern?**
+- **Separation of concerns:** Logic separated from UI
+- **Reusability:** Hook can be used across different components
+- **Type safety:** TypeScript ensures correct usage
+- **Clean API:** Component just calls `push(value)` without knowing implementation
+
+### Real-Time Rendering
+
+Visualizers re-render on every state change:
+
+```tsx
+const renderList = () => {
+  let current = First;
+  let arr: JSX.Element[] = [];
+  
+  while (current) {
+    arr.push(current.render());
+    current = current.next;
+  }
+  
+  const nullNode = new NullNode();
+  arr.push(nullNode.render());
+  
+  setNodes(arr);
+};
+```
+
+<Tip>
+  This pattern traverses the actual data structure (like a linked list) and builds an array of JSX elements. React then efficiently renders only what changed.
+</Tip>
+
+## Toggle Functionality
+
+Every visualizer includes a toggle to switch views:
+
+```tsx
+const [code, setCode] = useState(true);
+
+<button
+  onClick={() => {
+    setCode((prev) => !prev);
+  }}
+  className="fixed z-20 rounded top-20 right-5 px-4 py-2 bg-black text-white"
+>
+  {code ? "Explanation" : "Code"}
+</button>
+
+{code ? (
+  <Content html={codeHTML} />
+) : (
+  <div>
+    <Options {...operations} />
+    <div className="flex space-x-3">
+      <AnimatePresence>{nodes}</AnimatePresence>
+    </div>
+  </div>
+)}
+```
+
+**Toggle behavior:**
+1. Button is **fixed** in top-right corner (always accessible)
+2. Label shows the **next** view ("Explanation" when showing code)
+3. State switches between code walkthrough and interactive visualizer
+4. All component state (like stack contents) is **preserved** during toggle
+
+## Example Problems
+
+Some visualizers include example problem-solving modes:
+
+### Stack: Balanced Parentheses
+
+<Steps>
+  <Step title="Input Phase">
+    Enter a string of brackets: `"({[]})"`
+    
+    - Only bracket characters allowed: `( ) { } [ ] < >`
+    - Validation prevents other characters
+  </Step>
+  
+  <Step title="Execution Phase">
+    Click "Start" then "Next Step" to process character by character:
+    
+    - **Open bracket?** Push to stack (visual: element appears)
+    - **Close bracket?** Check if it matches top of stack
+      - Match: Pop from stack (visual: top element disappears)
+      - No match: Show error message and reset
+  </Step>
+  
+  <Step title="Validation Phase">
+    When string is empty:
+    
+    - **Stack empty?** Balanced parentheses ✓
+    - **Stack not empty?** Unbalanced parentheses ✗
+    
+    Visual feedback appears for 5 seconds before auto-reset
+  </Step>
+</Steps>
+
+```tsx
+const next = () => {
+  if (str === "") {
+    if (stack.length === 0) {
+      setPopupMsg("Its a balanced parenthesis");
+    } else {
+      setPopupMsg("Not balanced - stack isn't empty");
+    }
+    return;
+  }
+  
+  const bracket = str[0];
+  
+  if (openBrackets.includes(bracket)) {
+    const node = new Node(bracket);
+    tempStack.push(bracket);
+    setStack((prev) => [...prev, node.render()]);
+    setStr((prev) => prev.slice(1));
+  }
+  
+  if (closeBrackets.includes(bracket)) {
+    const openBracket = bracketPair[bracket];
+    const topBracket = tempStack[tempStack.length - 1];
+    
+    if (topBracket !== openBracket) {
+      setPopupMsg(`Close bracket ${bracket} doesn't match top bracket ${topBracket}`);
+      return;
+    }
+    
+    tempStack.pop();
+    setStack((prev) => prev.slice(0, -1));
+    setStr((prev) => prev.slice(1));
+  }
+};
+```
+
+## Responsive Design
+
+Visualizers adapt to different screen sizes:
+
+- **Desktop:** Side-by-side explanation panels
+- **Mobile:** Stacked layout with scrolling
+- **Overflow handling:** Horizontal scroll for wide structures (linked lists)
+- **Vertical scroll:** For tall structures (deep trees, full stacks)
+
+<Warning>
+  Some visualizers may have limited functionality on very small screens. For the best experience, use a device with at least a tablet-sized screen.
+</Warning>
+
+## Performance Optimizations
+
+<AccordionGroup>
+  <Accordion title="Lazy Rendering">
+    Only visible elements are fully rendered. Off-screen nodes use lightweight placeholders.
+  </Accordion>
+  
+  <Accordion title="Animation Throttling">
+    Rapid operations (like emptying a stack) are batched to prevent animation overload.
+  </Accordion>
+  
+  <Accordion title="Memoization">
+    Static content (code blocks, explanations) use React.memo to prevent unnecessary re-renders.
+  </Accordion>
+</AccordionGroup>
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Code Explanations" icon="book" href="/concepts/code-explanations">
+    Learn about the detailed code walkthroughs and complexity annotations
+  </Card>
+  <Card title="Contributing Guide" icon="code" href="/contributing/overview">
+    Learn how to contribute to DS Visualizer
+  </Card>
+</CardGroup>

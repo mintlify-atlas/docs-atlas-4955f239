@@ -1,0 +1,217 @@
+---
+title: "Selection Sort Visualizer"
+description: "Interactive visualization of the Selection Sort algorithm with step-by-step explanations and code examples"
+---
+
+# Selection Sort Visualizer
+
+Selection Sort is a simple comparison-based sorting algorithm that divides the array into sorted and unsorted portions, repeatedly finding the minimum element from the unsorted portion and placing it at the beginning.
+
+<Info>
+  Try the live interactive visualizer: [Selection Sort Visualizer](https://dsvisualizer.isatvik.com/SelectionSort)
+</Info>
+
+## How Selection Sort Works
+
+Selection Sort builds the sorted array one element at a time by repeatedly selecting the smallest remaining element.
+
+<Steps>
+  <Step title="Initialize outer loop">
+    Start from the first element and iterate through the array (stopping one element before the end, since the last element will automatically be in place).
+  </Step>
+  
+  <Step title="Find minimum element">
+    For each position `i`, assume it holds the minimum value (`minPos = i`). Then scan through all remaining unsorted elements (`j = i+1` to end) to find the actual minimum.
+  </Step>
+  
+  <Step title="Update minimum position">
+    When a smaller element is found at position `j`, update `minPos` to `j`. This tracks the index of the smallest element in the unsorted portion.
+  </Step>
+  
+  <Step title="Swap elements">
+    After completing the inner loop, swap the element at `minPos` with the element at `i`. This places the minimum element in its correct sorted position.
+  </Step>
+  
+  <Step title="Repeat">
+    Continue this process for all positions until the entire array is sorted.
+  </Step>
+</Steps>
+
+## Understanding the Visualization
+
+The DS Visualizer implementation provides visual feedback during the sorting process:
+
+### Color Indicators
+
+- **Purple (`#be12c9`)**: Current position being sorted (outer loop position `i`)
+- **Cyan (`#12c9bd`)**: Current minimum element found in the unsorted portion
+- **Gray (`#9ca3af`)**: Default/unsorted elements
+
+### Animation Behavior
+
+The visualizer uses scale transformations and color changes to highlight comparisons:
+
+```typescript
+const selectedEffect = async (
+  value: Value | null,
+  color: string,
+  delay: number
+) => {
+  if (!value) return;
+  const valueElement = document.querySelector<HTMLDivElement>(
+    `.a${value.key}`
+  );
+  if (!valueElement) return;
+  valueElement.style.transform = "scale(1.3)";
+  valueElement.style.backgroundColor = color;
+  await addDelay(delay);
+  valueElement.style.transform = "scale(1)";
+  valueElement.style.backgroundColor = "#9ca3af";
+};
+```
+
+Elements scale up to 1.3x their size when being compared, making it easy to follow the algorithm's progress.
+
+## Algorithm Implementation
+
+Here's the core sorting logic from the visualizer:
+
+```typescript
+const sortArray = async () => {
+  let minPos = 0;
+  for (let i = 0; i < values.length - 1; i++) {
+    minPos = i;
+    selectedEffect(values[i], "#be12c9", 1000 * (values.length - i));
+    for (let j = i + 1; j < values.length; j++) {
+      if (values[j].value < values[minPos].value) {
+        minPos = j;
+        await selectedEffect(values[minPos], "#12c9bd", 1200);
+      }
+    }
+    swapElements(minPos, i);
+    renderArray();
+    removeColor(values[minPos]);
+  }
+  setStart(false);
+};
+```
+
+### Key Implementation Details
+
+1. **Outer loop runs to `values.length - 1`**: The last element is automatically in place once all others are sorted
+2. **Inner loop starts at `i + 1`**: Only unsorted elements are compared
+3. **Visual delay is proportional to remaining elements**: `1000 * (values.length - i)` provides longer highlights for earlier iterations
+4. **Swap happens after finding minimum**: Elements are only swapped once per outer loop iteration
+
+## Java Implementation
+
+Here's a complete Java implementation of Selection Sort:
+
+```java
+class SelectionSort {
+    public static void sort(int[] arr) {
+        int minPos = 0;
+        
+        // Outer loop: iterate through each position
+        for(int i = 0; i < arr.length - 1; i++) {
+            // Assume current position has minimum value
+            minPos = i;
+            
+            // Inner loop: find actual minimum in remaining unsorted portion
+            for(int j = i + 1; j < arr.length; j++) {
+                if(arr[j] < arr[minPos]) {
+                    minPos = j;
+                }
+            }
+            
+            // Swap minimum element with current position
+            int temp = arr[minPos];
+            arr[minPos] = arr[i];
+            arr[i] = temp;
+        }
+    }
+    
+    public static void main(String args[]) {
+        int[] arr1 = new int[5];
+        int n = 5;
+        for(int i = 0; i < 5; i++) {
+            arr1[i] = n;
+            n--;
+        }
+        
+        System.out.println("Before sorting ");
+        System.out.println(Arrays.toString(arr1));
+        sort(arr1);
+        System.out.println("After sorting ");
+        System.out.println(Arrays.toString(arr1));
+    }
+}
+```
+
+<Note>
+  The outer loop terminates at `arr.length - 1` because when all but one element are in their correct positions, the last element is automatically sorted.
+</Note>
+
+## Complexity Analysis
+
+### Time Complexity
+
+- **Worst Case: O(n²)** - Even if the array is already sorted, Selection Sort still performs all comparisons
+- **Average Case: O(n²)** - The nested loops always execute the same number of times regardless of input
+- **Best Case: O(n²)** - Unlike some algorithms, Selection Sort doesn't benefit from pre-sorted data
+
+The algorithm performs exactly `(n-1) + (n-2) + ... + 1 = n(n-1)/2` comparisons.
+
+### Space Complexity
+
+- **O(1)** - Selection Sort is an in-place sorting algorithm that only uses a constant amount of extra space for the `minPos` and `temp` variables during swapping.
+
+## Interactive Features
+
+The visualizer provides an intuitive interface:
+
+### Adding Elements
+
+```typescript
+const addToArr = (e: FormEvent<HTMLFormElement> | MouseEvent) => {
+  e.preventDefault();
+  const value = parseInt(inputRef.current?.value || "0");
+  
+  let copy = [...values];
+  copy.push(new Value(value));
+  setValues(copy);
+  let x: JSX.Element[] = [];
+  copy.forEach((e) => x.push(e.render()));
+  setRenderArr(x);
+};
+```
+
+Users can:
+- Input custom numbers to add to the array
+- Click "Insert" to add elements individually
+- Click "Sort" to start the visualization
+- Watch the algorithm find and swap minimum elements in real-time
+
+## When to Use Selection Sort
+
+<Info>
+  Selection Sort is best used for:
+  - Small datasets where simplicity is valued over efficiency
+  - Educational purposes to understand sorting fundamentals
+  - Systems with limited memory (due to O(1) space complexity)
+  - Situations where write operations are expensive (Selection Sort minimizes swaps)
+</Info>
+
+<Note>
+  For larger datasets or performance-critical applications, consider more efficient algorithms like Quick Sort, Merge Sort, or Heap Sort.
+</Note>
+
+## Try It Yourself
+
+Visit the [Selection Sort Visualizer](https://dsvisualizer.isatvik.com/SelectionSort) to:
+- Add your own numbers to the array
+- Watch the algorithm find minimum elements
+- See elements swap positions in real-time
+- Understand how the sorted and unsorted portions grow and shrink
+
+The visual feedback with color coding and animations makes it easy to follow the algorithm's logic and understand why Selection Sort has O(n²) time complexity.

@@ -1,0 +1,665 @@
+---
+title: 'Code Explanations & Complexity Analysis'
+description: 'Understanding the detailed code walkthroughs, complexity annotations, and educational content in DS Visualizer'
+---
+
+DS Visualizer provides comprehensive code explanations for every data structure, complete with time/space complexity analysis, inline comments, and progressive learning content.
+
+## Content Format
+
+All code explanations are written in **MDX** - Markdown with embedded React components. This allows rich formatting alongside educational content.
+
+### MDX Structure
+
+A typical code explanation file follows this structure:
+
+```mdx
+# Data Structure Name
+
+> Brief definition and key characteristics
+
+## Basic Structure
+
+\`\`\`java:ClassName.java
+class DataStructure {
+    // Fields
+    private int[] items;
+    private int count;
+    
+    // Methods
+    public void operation() {}
+}
+\`\`\`
+
+## Method: operationName
+
+\`\`\`java:methodName.java
+/*
+ * Time: O(1)
+ * Space: O(1)
+ */
+public void operationName() {
+    // Implementation
+}
+\`\`\`
+
+Explanation of how the method works...
+```
+
+<Info>
+  MDX files are parsed server-side using `next-mdx-remote` and rendered with syntax highlighting via Prism.js.
+</Info>
+
+## Complexity Annotations
+
+Every method includes time and space complexity analysis in a consistent format:
+
+### Standard Format
+
+```java
+/*
+ * Time: O(n)
+ * Space: O(1)
+ */
+public void method() {
+    // Implementation
+}
+```
+
+**Why this format?**
+- **Visibility:** Appears immediately before the method signature
+- **Consistency:** Same format across all data structures
+- **Reference:** Easy to scan when comparing operations
+- **Learning:** Connects implementation details to performance characteristics
+
+### Complexity Classes
+
+<Tabs>
+  <Tab title="O(1) - Constant">
+    **Operations that take the same time regardless of input size.**
+    
+    **Examples from DS Visualizer:**
+    
+    ```java
+    // Stack: Push
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public void push(int value) {
+        if(count == capacity)
+            return;
+        items[count++] = value;
+    }
+    ```
+    
+    ```java
+    // LinkedList: Add First
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public void addFirst(int value) {
+        length++;
+        Node node = new Node(value);
+        if (this.head == null) {
+            this.head = this.tail = node;
+            return;
+        }
+        node.next = head;
+        head = node;
+    }
+    ```
+    
+    **Key insight:** Direct access, no iteration required.
+  </Tab>
+  
+  <Tab title="O(n) - Linear">
+    **Operations that scale linearly with input size.**
+    
+    **Examples from DS Visualizer:**
+    
+    ```java
+    // LinkedList: Insert At Index
+    /*
+     * Time: O(n)
+     * Space: O(1)
+     */
+    public void insertAt(int index, int value) {
+        // ... validation ...
+        
+        Node current = head;
+        Node node = new Node(value);
+        
+        // This for loop is why time is O(n)
+        for (int i = 0; i < index - 1; i++) {
+            current = current.next;
+        }
+        
+        Node temp = current.next;
+        current.next = node;
+        node.next = temp;
+    }
+    ```
+    
+    ```java
+    // Stack: toString
+    /*
+     * Time: O(n)
+     * Space: O(n)
+     */
+    public String toString() {
+        var values = Arrays.copyOfRange(items, 0, count);
+        // This method creates a new array - O(n) space
+        return Arrays.toString(values);
+    }
+    ```
+    
+    **Key insight:** Must traverse or process every element.
+  </Tab>
+  
+  <Tab title="O(log n) - Logarithmic">
+    **Operations that halve the problem space each step.**
+    
+    **Examples in DS Visualizer:**
+    
+    ```java
+    // Binary Search Tree: Search
+    /*
+     * Time: O(log n) average, O(n) worst case
+     * Space: O(1)
+     */
+    public boolean contains(int value) {
+        Node current = root;
+        while (current != null) {
+            if (value < current.value)
+                current = current.left;
+            else if (value > current.value)
+                current = current.right;
+            else
+                return true;
+        }
+        return false;
+    }
+    ```
+    
+    **Key insight:** Decision at each node eliminates half the remaining nodes.
+  </Tab>
+  
+  <Tab title="Space Complexity">
+    **Memory usage beyond input storage.**
+    
+    **O(1) Space:**
+    ```java
+    // Only uses a few variables
+    public void addFirst(int value) {
+        Node node = new Node(value);  // Single node
+        node.next = head;
+        head = node;
+    }
+    ```
+    
+    **O(n) Space:**
+    ```java
+    // Creates array copy
+    public String toString() {
+        var values = Arrays.copyOfRange(items, 0, count);
+        // New array = O(n) space
+        return Arrays.toString(values);
+    }
+    ```
+    
+    <Note>
+      Space complexity in DS Visualizer explanations refers to **auxiliary space** - memory used beyond the input itself.
+    </Note>
+  </Tab>
+</Tabs>
+
+## Progressive Learning Structure
+
+Code explanations follow a pedagogical progression:
+
+<Steps>
+  <Step title="Definition & Analogy">
+    Start with plain English definition and real-world analogy:
+    
+    > "Stack is a data structure where elements that enter last leave first. This is similar to a stack of books."
+    
+    > "Queue is a data structure where elements that enter first leaves first... An analogy can be a shopping queue."
+  </Step>
+  
+  <Step title="Basic Structure">
+    Show the class skeleton with all fields and method signatures:
+    
+    ```java
+    class Stack {
+        private int[] items;
+        private int count;
+        private int capacity;
+        
+        public void push(int value) {}
+        public void pop() {}
+        public int peek() {}
+        public boolean isEmpty() {}
+    }
+    ```
+    
+    Explain each field's purpose before diving into methods.
+  </Step>
+  
+  <Step title="Simple Operations First">
+    Start with easiest operations (often O(1)):
+    
+    1. **Stack:** `push` → `pop` → `peek` → `isEmpty` → `toString`
+    2. **LinkedList:** `addFirst` → `addLast` → `removeFirst` → `removeLast` → `insertAt`
+    3. **Queue:** `enqueue` → `dequeue` → `peek` → `isEmpty`
+  </Step>
+  
+  <Step title="Complex Operations">
+    Build up to more complex operations with detailed walkthroughs:
+    
+    For LinkedList's `insertAt`, the explanation includes:
+    - Step-by-step breakdown
+    - ASCII art diagrams
+    - Before/after state comparisons
+    - Edge case handling
+  </Step>
+  
+  <Step title="Edge Cases & Best Practices">
+    Highlight important considerations:
+    
+    ```java
+    public void push(int value) {
+        if(count == capacity)  // Check if full
+            return;
+        // ...
+    }
+    ```
+    
+    With notes like:
+    > "Instead of stopping execution by using return, you can use exception but I'll leave this friendly and not put any exceptions."
+  </Step>
+</Steps>
+
+## Code Walkthrough Patterns
+
+### Step-by-Step Analysis
+
+Complex operations include numbered step analysis:
+
+<Accordion title="Example: LinkedList Insert At Index">
+  ```mdx
+  ### Lets analyse the code
+  
+  **Step 1:** We add length since we are adding a Node into it.
+  
+  **Step 2:** So what is current? current is a pointer, which initially points to the first node.
+  
+  **Step 3:** We need to get hold of the element that's before the given index.
+  
+  \`\`\`
+  1 -> 2 -> 3 -> 4
+  \`\`\`
+  
+  Suppose we want to add the element `node(5)` at index 2, which is at Node(3) position...
+  
+  **Step 4:** Since we don't want to lose the other nodes, we store them in a temp variable...
+  ```
+  
+  This format:
+  - Numbers the steps clearly
+  - Uses ASCII diagrams to visualize
+  - Asks and answers potential questions
+  - Connects code to conceptual understanding
+</Accordion>
+
+### Visual ASCII Diagrams
+
+Code explanations include inline ASCII art:
+
+```java
+// LinkedList addFirst
+node.next = head;
+head = node;
+
+// Node(0) 1 -> 2
+// 0 -> 1 -> 2
+// just link 0 to head
+```
+
+```java
+// LinkedList insertAt
+/*
+ * Suppose 1 -> 2 -> 3 -> 4
+ * if we want to remove index 3, we iterate till 2,
+ * then make Node(2).next to point it to 4 instead of pointing it to Node(3).
+ * By doing this, no node will be referencing 3 anymore.
+ * Result: 1 -> 2 -> 4
+ */
+```
+
+<Tip>
+  ASCII diagrams appear as **inline code comments**, making them visible alongside the implementation. When you toggle to the visualizer, you can see these transformations animated.
+</Tip>
+
+## Optimization Explanations
+
+Code walkthroughs explain why certain optimizations exist:
+
+<AccordionGroup>
+  <Accordion title="LinkedList: Why Track Length?">
+    ```java
+    private int length = 0;
+    
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public int size() {
+        return length;
+    }
+    ```
+    
+    > "length is optional but can change the time of `size()` method to go from O(n) to O(1) and has no effect on the space. Ways to decrease time 😉."
+    
+    **Educational value:** Students learn that trading a small amount of space (one integer) can dramatically improve performance.
+  </Accordion>
+  
+  <Accordion title="LinkedList: insertAt Optimization">
+    ```java
+    public void insertAt(int index, int value) {
+        if (index == 0) {
+            addFirst(value);
+            return;
+        }
+        if (index == length) {
+            addLast(value);  // O(1) instead of O(n)
+            return;
+        }
+        // ... general case requires iteration ...
+    }
+    ```
+    
+    > "If you look at the bottom code, we had to iterate till the index element, and we know addLast is O(1) operation so why do you want to make this do O(n) when it can be done in O(1)."
+    
+    **Educational value:** Recognize special cases that can be handled more efficiently.
+  </Accordion>
+  
+  <Accordion title="Stack: Array vs LinkedList">
+    At the end of Stack explanation:
+    
+    > "If you read till here, your question can we just use a linked list? cuz that's the same thing going around my mind now, there is no harm in using a linked list and getting this work done in few statements but I wanted to teach you the traditional method using an array."
+    
+    **Educational value:** Acknowledge trade-offs and alternative implementations.
+  </Accordion>
+</AccordionGroup>
+
+## Language & Syntax
+
+DS Visualizer uses **Java** for all code implementations:
+
+```java
+class LinkedList {
+    class Node {
+        int value;
+        Node next = null;
+        
+        public Node(int value) {
+            this.value = value;
+        }
+    }
+    // ...
+}
+```
+
+### Syntax Highlighting
+
+Code blocks use Prism.js with:
+- **Language tags:** ` ```java:filename.java `
+- **File naming:** Helps identify code snippets
+- **Java grammar:** Full syntax support including generics, annotations
+
+<CodeGroup>
+```java push.java
+/*
+ * Time: O(1)
+ * Space: O(1)
+ */
+public void push(int value) {
+    if(count == capacity)
+        return;
+    items[count++] = value;
+}
+```
+
+```java pop.java
+/*
+ * Time: O(1)
+ * Space: O(1)
+ */
+public int pop() {
+    if(count == 0)
+        // throw error
+    int temp = items[count - 1];
+    items[count--] = 0;
+    return temp;
+}
+```
+</CodeGroup>
+
+## Rendering Pipeline
+
+How code explanations become interactive pages:
+
+<Steps>
+  <Step title="MDX Files in /content">
+    Written by educators in MDX format:
+    
+    ```
+    content/
+    ├── stack/code.mdx
+    ├── linkedlist/linkedlist-code.mdx
+    └── queue/code.mdx
+    ```
+  </Step>
+  
+  <Step title="Server-Side Processing">
+    Next.js page components load MDX at build time:
+    
+    ```tsx
+    export const getStaticProps = async () => {
+      const codePath = path.resolve(process.cwd(), "content/stack/code.mdx");
+      const mdx = fs.readFileSync(codePath, "utf-8");
+      const html = await serialize(mdx);
+      return { props: { html } };
+    };
+    ```
+  </Step>
+  
+  <Step title="MDX Serialization">
+    `next-mdx-remote` converts MDX to renderable format:
+    
+    - Parses markdown
+    - Identifies React components
+    - Prepares for client-side hydration
+  </Step>
+  
+  <Step title="Client Rendering">
+    `Content` component renders with syntax highlighting:
+    
+    ```tsx
+    const Content: React.FC<Props> = ({ html }) => {
+      useEffect(() => {
+        Prism.highlightAll();
+      });
+      return (
+        <div className="blog max-w-[1000px] mx-auto">
+          <MDXRemote {...html} />
+        </div>
+      );
+    };
+    ```
+  </Step>
+  
+  <Step title="Prism.js Highlighting">
+    On mount, Prism finds code blocks and applies syntax highlighting:
+    
+    - Java grammar loaded via `prism-java.js`
+    - Line numbers added
+    - Color scheme applied
+  </Step>
+</Steps>
+
+<Info>
+  This pipeline means code explanations are **fast** (pre-rendered) and **interactive** (can include React components).
+</Info>
+
+## Interactive Elements
+
+MDX allows embedding interactive components in explanations:
+
+### Blockquotes for Key Insights
+
+```mdx
+> Stack is a data structure where elements that enter last leave first.
+> They are also known as, `LIFO`-**Last In First Out**.
+```
+
+Renders as styled callouts with emphasis.
+
+### Inline Code for Emphasis
+
+```mdx
+The `count` variable is the index for the next element that enters.
+```
+
+Highlights technical terms and variable names.
+
+### Bold for Important Concepts
+
+```mdx
+Peek and pop are kinda similar, where both methods target the top element.
+But the major difference is that peek returns the element and **doesn't remove the element**.
+```
+
+## Educational Philosophy
+
+Code explanations in DS Visualizer follow specific teaching principles:
+
+<CardGroup cols={2}>
+  <Card title="Friendly Tone" icon="smile">
+    "If you read till here, you question can we just use a linked list? cuz that's the same thing going around my mind now..."
+    
+    Uses conversational language and emojis (😉) to reduce intimidation.
+  </Card>
+  
+  <Card title="Questions & Answers" icon="comments">
+    "So what happened to Node(3) and the rest 😣??"
+    
+    Anticipates confusion and addresses it directly.
+  </Card>
+  
+  <Card title="Visual First" icon="eye">
+    ASCII diagrams before detailed explanations help build mental models.
+  </Card>
+  
+  <Card title="Build Up Complexity" icon="stairs">
+    "Alright that was a ride, lets get back to some easier methods now :)"
+    
+    Acknowledges difficulty and provides relief.
+  </Card>
+</CardGroup>
+
+## Homework & Practice
+
+Some explanations end with challenges:
+
+> "Now with all the information you read, try to build contains method. That's your homework 😉"
+
+<Tip>
+  These challenges encourage active learning. Students can then check their implementation against similar methods in the codebase.
+</Tip>
+
+## Toggle Between Code and Visualizer
+
+The true power of code explanations is the ability to switch to the visualizer:
+
+<Steps>
+  <Step title="Read Implementation">
+    Study the `push` method with O(1) complexity annotation.
+  </Step>
+  
+  <Step title="Click Toggle">
+    Switch from "Code" to "Example/Explanation" view.
+  </Step>
+  
+  <Step title="Execute Operation">
+    Enter a value and click "Push" button.
+  </Step>
+  
+  <Step title="Observe Animation">
+    Watch the element appear at the top with fade-in animation.
+  </Step>
+  
+  <Step title="Connect Concepts">
+    Realize the animation represents `items[count++] = value`.
+  </Step>
+</Steps>
+
+<Warning>
+  This back-and-forth between code and visualization is **intentional**. It helps cement the connection between abstract code and concrete behavior.
+</Warning>
+
+## Content Organization
+
+Each data structure may have multiple MDX files:
+
+<Tabs>
+  <Tab title="Stack">
+    - `code.mdx` - Implementation walkthrough
+    - `bracket_pair.mdx` - Example problem explanation
+    - `bracket-code.mdx` - Example problem code
+  </Tab>
+  
+  <Tab title="Queue">
+    - `code.mdx` - Array-based implementation
+    - `code-linkedlist.mdx` - LinkedList-based implementation
+  </Tab>
+  
+  <Tab title="LinkedList">
+    - `linkedlist-code.mdx` - Implementation with all methods
+    - `linkedlist.mdx` - Conceptual explanation
+  </Tab>
+  
+  <Tab title="Binary Tree">
+    - `BST-code.mdx` - Binary Search Tree operations
+  </Tab>
+</Tabs>
+
+## Styling & Presentation
+
+The `Content` component wraps all explanations:
+
+```tsx
+<div className="blog w-screen max-w-[1000px] overflow-hidden mx-auto 
+                px-3 py-10 pb-20 text-gray-100">
+  <MDXRemote {...html} />
+</div>
+```
+
+**Styling features:**
+- Max width for readability (1000px)
+- Light text on dark background
+- Generous padding for breathing room
+- Responsive layout for mobile devices
+
+## What's Next?
+
+<CardGroup cols={2}>
+  <Card title="Try a Visualizer" icon="play" href="/data-structures/stack">
+    Experience the code explanations and visualizers working together
+  </Card>
+  <Card title="Contributing Guide" icon="code" href="/contributing/overview">
+    Learn how to create your own content following these patterns
+  </Card>
+</CardGroup>

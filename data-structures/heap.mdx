@@ -1,0 +1,231 @@
+---
+title: Heap Visualizer
+description: Interactive visualization of heap data structure with step-by-step insert and remove operations
+---
+
+# Heap Visualizer
+
+Explore the heap data structure with an interactive visualizer that demonstrates heap properties, insertion with bubble-up, and removal with bubble-down operations.
+
+<Card title="Try the Live Visualizer" icon="play" href="https://dsvisualizer.isatvik.com/heap">
+  Interact with the heap visualizer to see how elements maintain the heap property through insertion and removal
+</Card>
+
+## What is a Heap?
+
+A heap is a specialized binary tree data structure that satisfies the **heap property**:
+
+<Tabs>
+  <Tab title="Max Heap">
+    In a max heap, every parent node has a value **greater than or equal to** its children. The root node always contains the **maximum** value.
+    
+    ```text
+          10
+        /    \
+       5      6
+      / \    /
+     5   4  3
+    ```
+  </Tab>
+  
+  <Tab title="Min Heap">
+    In a min heap, every parent node has a value **less than or equal to** its children. The root node always contains the **minimum** value.
+    
+    ```text
+          3
+        /    \
+       5      6
+      / \    /
+     10  8  7
+    ```
+  </Tab>
+</Tabs>
+
+### Key Properties
+
+<CardGroup cols={2}>
+  <Card title="Complete Binary Tree" icon="tree">
+    Heaps are filled from **left to right** at each level. All levels are completely filled except possibly the last level.
+  </Card>
+  
+  <Card title="Array Implementation" icon="list">
+    Heaps are efficiently stored as arrays since they're always complete binary trees, making them space-efficient.
+  </Card>
+</CardGroup>
+
+## Parent-Child Relationships
+
+Heaps use simple formulas to navigate the tree structure when stored as an array:
+
+<Note>
+  For any element at index `i`:
+  - **Parent index**: `(i - 1) / 2`
+  - **Left child index**: `(2 * i) + 1`
+  - **Right child index**: `(2 * i) + 2`
+</Note>
+
+These relationships allow efficient traversal without storing explicit pointers.
+
+## Operations
+
+### Insert Operation
+
+Insertion maintains the heap property through a **bubble-up** process:
+
+<Steps>
+  <Step title="Add to End">
+    Insert the new element at the end of the array (bottom-right of the tree) to maintain the complete binary tree property.
+  </Step>
+  
+  <Step title="Bubble Up">
+    Compare the new element with its parent. If it violates the heap property (greater than parent in max heap), swap them.
+  </Step>
+  
+  <Step title="Repeat">
+    Continue bubbling up until the element is in the correct position or reaches the root.
+  </Step>
+</Steps>
+
+**Example**: Inserting 7 into `[10, 5, 6, 5, 4, 6]`
+
+```text
+Initial: [10, 5, 6, 5, 4, 6]
+Add 7:   [10, 5, 6, 5, 4, 6, 7]
+Swap:    [10, 5, 7, 5, 4, 6, 6]  (7 > 6, swap with parent)
+Final:   [10, 5, 7, 5, 4, 6, 6]  (7 < 10, stop)
+```
+
+<Info>
+  **Time Complexity**: O(log n) - In the worst case, the element bubbles up the entire height of the tree
+</Info>
+
+### Remove Operation
+
+Removal always extracts the root and uses **bubble-down** to restore the heap:
+
+<Steps>
+  <Step title="Remove Root">
+    Extract the root element (maximum in max heap). This is the element being removed.
+  </Step>
+  
+  <Step title="Replace with Last">
+    Move the last element in the array to the root position to maintain the complete tree property.
+  </Step>
+  
+  <Step title="Bubble Down">
+    Compare the new root with its children. Swap with the larger child (in max heap) if it violates the heap property.
+  </Step>
+  
+  <Step title="Repeat">
+    Continue bubbling down until the element is in the correct position or becomes a leaf node.
+  </Step>
+</Steps>
+
+**Example**: Removing from `[10, 5, 6, 5, 4, 3]`
+
+```text
+Initial:  [10, 5, 6, 5, 4, 3]
+Remove:   [3, 5, 6, 5, 4]       (remove 10, move 3 to root)
+Swap:     [6, 5, 3, 5, 4]       (3 < 6, swap with larger child)
+Final:    [6, 5, 3, 5, 4]       (3 has no larger children)
+```
+
+<Info>
+  **Time Complexity**: O(log n) - The element may need to bubble down the entire height of the tree
+</Info>
+
+## Using the Visualizer
+
+The heap visualizer provides both a tree view and an array representation:
+
+<Steps>
+  <Step title="Insert Elements">
+    Enter a value and click **Insert**. The element is added at the end of the heap.
+  </Step>
+  
+  <Step title="Step Through Heapify">
+    If the insertion violates the heap property, click **Next Step** to see the bubble-up process in action.
+  </Step>
+  
+  <Step title="Remove Elements">
+    Click **Remove** to extract the root. Use **Next Step** to visualize the bubble-down process.
+  </Step>
+  
+  <Step title="Toggle Views">
+    Use **Show/Hide Tree** to switch between tree and array-only views.
+  </Step>
+</Steps>
+
+<Warning>
+  You cannot insert or remove elements while a heapify operation is in progress. Complete the current operation using **Next Step** first.
+</Warning>
+
+## Implementation Details
+
+The visualizer implements these core helper methods:
+
+```javascript
+// Check if a node satisfies heap property
+function isValidParent(index) {
+  if (!hasLeftChild(index)) return true;
+  if (!hasRightChild(index)) 
+    return heap[index] >= leftChild(index);
+  return heap[index] >= leftChild(index) && 
+         heap[index] >= rightChild(index);
+}
+
+// Find the larger child for bubble-down
+function largerChildIndex(index) {
+  if (!hasRightChild(index)) 
+    return leftChildIndex(index);
+  return leftChild(index) > rightChild(index) 
+    ? leftChildIndex(index) 
+    : rightChildIndex(index);
+}
+```
+
+## Time Complexity Summary
+
+<CardGroup cols={3}>
+  <Card title="Insert" icon="plus">
+    **O(log n)**
+    
+    Bubble up operation
+  </Card>
+  
+  <Card title="Remove" icon="minus">
+    **O(log n)**
+    
+    Bubble down operation
+  </Card>
+  
+  <Card title="Peek" icon="eye">
+    **O(1)**
+    
+    Access root element
+  </Card>
+</CardGroup>
+
+## Common Use Cases
+
+- **Priority Queues**: Efficiently manage tasks by priority
+- **Heap Sort**: O(n log n) sorting algorithm
+- **Dijkstra's Algorithm**: Finding shortest paths in graphs
+- **Median Maintenance**: Track running median in streams
+- **Job Scheduling**: Operating system task management
+
+## Related Visualizers
+
+<CardGroup cols={2}>
+  <Card title="Priority Queue" icon="list-ol" href="/data-structures/priority-queue">
+    See how heaps power priority queue operations
+  </Card>
+  
+  <Card title="Binary Tree" icon="diagram-project" href="/data-structures/binary-tree">
+    Explore general binary tree traversals
+  </Card>
+</CardGroup>
+
+<Card title="Interactive Heap Visualizer" icon="arrow-up-right-from-square" href="https://dsvisualizer.isatvik.com/heap">
+  Practice inserting and removing elements with step-by-step visualization
+</Card>

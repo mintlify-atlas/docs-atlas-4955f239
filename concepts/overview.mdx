@@ -1,0 +1,198 @@
+---
+title: 'How DS Visualizer Works'
+description: 'Understanding the architecture and interactive learning approach of DS Visualizer'
+---
+
+DS Visualizer is an educational platform that combines three key elements to help you master data structures and algorithms: **interactive visualizations**, **detailed code walkthroughs**, and **real-time complexity analysis**.
+
+## The Core Architecture
+
+DS Visualizer is built with a modern stack designed for smooth, interactive learning:
+
+<CardGroup cols={2}>
+  <Card title="Next.js & TypeScript" icon="react">
+    Server-side rendering for fast page loads and type-safe code throughout the platform
+  </Card>
+  <Card title="Framer Motion" icon="wand-magic-sparkles">
+    Powerful animation library that brings data structures to life with smooth transitions
+  </Card>
+  <Card title="MDX Content" icon="file-code">
+    Write educational content with interactive components embedded directly in markdown
+  </Card>
+  <Card title="Prism.js" icon="code">
+    Syntax highlighting with complexity annotations for clearer code understanding
+  </Card>
+</CardGroup>
+
+## Three Learning Modes
+
+Each data structure page offers three distinct ways to learn:
+
+<Tabs>
+  <Tab title="Code View">
+    Read detailed code implementations with inline complexity annotations:
+    
+    ```java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public void push(int value) {
+        if(count == capacity)
+            return;
+        items[count++] = value;
+    }
+    ```
+    
+    Every method includes:
+    - Time complexity analysis
+    - Space complexity analysis
+    - Step-by-step code explanations
+    - Best practices and edge cases
+  </Tab>
+  
+  <Tab title="Interactive Visualizer">
+    Manipulate data structures in real-time:
+    
+    - **Input controls**: Text fields and buttons to add/remove elements
+    - **Live animations**: Watch elements move, insert, and delete with smooth transitions
+    - **State tracking**: See pointers like `head`, `tail`, `front`, `rear` update in real-time
+    - **Visual feedback**: Count displays, color-coded nodes, and structural indicators
+    
+    <Note>
+      Visualizers use Framer Motion's `AnimatePresence` and `AnimateSharedLayout` to create smooth enter/exit animations and layout transitions.
+    </Note>
+  </Tab>
+  
+  <Tab title="Example Problems">
+    Apply concepts to real algorithmic challenges:
+    
+    - **Step-by-step execution**: Click "Next Step" to see the algorithm progress
+    - **Interactive input**: Provide your own test cases
+    - **Visual problem solving**: Watch the data structure solve problems like balanced parentheses checking
+    - **Immediate feedback**: Get validation messages when conditions are met
+  </Tab>
+</Tabs>
+
+## Toggle Between Views
+
+The hallmark of DS Visualizer is the ability to switch perspectives instantly:
+
+<Info>
+  Every visualizer page includes a **toggle button** (usually top-right) that switches between:
+  - **Code** ↔️ **Explanation** (for LinkedList, Queue, etc.)
+  - **Code** ↔️ **Example** (for Stack with bracket matching)
+  
+  This allows you to:
+  1. Read the implementation details
+  2. Switch to the visualizer to see it in action
+  3. Go back to the code to understand *why* it works
+</Info>
+
+## Component Architecture
+
+Each data structure is built with a consistent pattern:
+
+```typescript
+// Main component handles toggle state
+const [toggle, setToggle] = useState(true);
+
+// Renders either code content or interactive visualizer
+{toggle ? (
+  <Code html={content} />
+) : (
+  <ExampleOne html={example} exampleCode={exampleCode} />
+)}
+```
+
+### Key Components
+
+<AccordionGroup>
+  <Accordion title="OptionBackground">
+    A consistent control panel that appears at the top of every visualizer, containing:
+    - Input fields for data entry
+    - Action buttons (Push, Pop, Insert, Delete, etc.)
+    - Form controls with validation
+  </Accordion>
+  
+  <Accordion title="Content">
+    Renders MDX content with syntax highlighting via Prism.js. Automatically highlights code blocks on mount and when content changes.
+  </Accordion>
+  
+  <Accordion title="Custom Hooks">
+    Encapsulate data structure logic:
+    - `useStack` - Stack operations (push, pop, empty)
+    - `useBinaryTree` - Tree rendering and insertion
+    - State management and rendering logic separated from UI
+  </Accordion>
+  
+  <Accordion title="Node Classes">
+    Each data structure has a Node class that:
+    - Stores the data and pointers
+    - Provides a `render()` method that returns animated JSX
+    - Handles visual state like labels ("head", "tail")
+  </Accordion>
+</AccordionGroup>
+
+## The Learning Flow
+
+DS Visualizer is designed for a specific learning journey:
+
+<Steps>
+  <Step title="Read the Overview">
+    Start with the written explanation to understand the concept (LIFO for stacks, FIFO for queues, etc.)
+  </Step>
+  
+  <Step title="Study the Code">
+    Examine the implementation with complexity annotations. See how the data structure is constructed and why each operation has its complexity.
+  </Step>
+  
+  <Step title="Toggle to Visualizer">
+    Click the toggle button to switch to the interactive visualizer. Try the basic operations to see them animated.
+  </Step>
+  
+  <Step title="Experiment">
+    Add your own values, try edge cases (empty stack, full queue), and observe the behavior.
+  </Step>
+  
+  <Step title="Solve Problems">
+    For data structures with example problems (like Stack's balanced parentheses), work through the algorithmic challenge step-by-step.
+  </Step>
+</Steps>
+
+## Content Organization
+
+All educational content lives in the `/content` directory:
+
+```
+content/
+├── stack/
+│   ├── code.mdx              # Stack implementation
+│   ├── bracket_pair.mdx      # Example explanation
+│   └── bracket-code.mdx      # Example code
+├── queue/
+│   ├── code.mdx
+│   └── code-linkedlist.mdx
+├── linkedlist/
+│   ├── linkedlist-code.mdx
+│   └── linkedlist.mdx
+└── Tree/
+    └── BST-code.mdx
+```
+
+<Tip>
+  MDX files combine markdown with React components, allowing rich formatting alongside educational content. They're parsed server-side using `next-mdx-remote`.
+</Tip>
+
+## What's Next?
+
+Now that you understand the overall architecture:
+
+<CardGroup cols={2}>
+  <Card title="Explore Visualizers" icon="eyes" href="/concepts/visualizers">
+    Learn how interactive visualizations work and what features they offer
+  </Card>
+  <Card title="Code Explanations" icon="book" href="/concepts/code-explanations">
+    Understand the code walkthrough format and complexity annotations
+  </Card>
+</CardGroup>

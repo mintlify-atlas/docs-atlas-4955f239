@@ -1,0 +1,363 @@
+---
+title: HashSet Visualizer
+description: Interactive visualization of HashSet data structure for storing unique values with O(1) operations
+---
+
+## What is a HashSet?
+
+A **HashSet** is similar to a [HashMap](/data-structures/hashmap), but with one key difference: it stores only unique keys without associated values. It's perfect when you need to track whether elements exist in a collection without caring about additional data.
+
+<Note>
+  If you're new to hash-based data structures, we recommend reading the [HashMap documentation](/data-structures/hashmap) first to understand hashing fundamentals and collision handling.
+</Note>
+
+## Try the Interactive Visualizer
+
+Experiment with HashSet operations in real-time:
+
+<Card title="HashSet Visualizer" icon="grid-2" href="https://dsvisualizer.isatvik.com/hashset">
+  Add unique values, attempt duplicates, remove entries, and observe collision handling with visual animations.
+</Card>
+
+## HashSet vs HashMap
+
+<CardGroup cols={2}>
+  <Card title="HashMap" icon="key">
+    Stores **key-value pairs**  
+    `{"Alice": 25, "Bob": 30}`  
+    Use when you need associated data
+  </Card>
+  
+  <Card title="HashSet" icon="list-check">
+    Stores **unique keys only**  
+    `{"Alice", "Bob", "Charlie"}`  
+    Use when you only care about membership
+  </Card>
+</CardGroup>
+
+## Core Operations
+
+The DS Visualizer HashSet uses an array of size 10 with chaining for collision resolution. The hash function computes `key % 10` for numeric keys.
+
+### Add Operation
+
+Inserts a unique key into the set:
+
+```java
+void add(Integer key) {
+  int hash = hash(key);
+  LinkedList<Entry> entries = set[hash];
+  
+  // Create new list if bucket is empty
+  if (entries == null) {
+    entries = new LinkedList<Entry>();
+    set[hash] = entries;
+  }
+  
+  Entry entry = getEntry(key, entries);
+  
+  // Prevent duplicates - key already exists
+  if (entry != null)
+    return;
+  
+  // Add new entry
+  entries.add(new Entry(key));
+}
+```
+
+<Info>
+  **Time Complexity:** O(1) average case with good hash distribution, O(n) worst case where n = entries in the bucket
+</Info>
+
+<Warning>
+  HashSets **automatically prevent duplicates**. Attempting to add an existing key does nothing - no error is thrown.
+</Warning>
+
+### Remove Operation
+
+Deletes a key from the set:
+
+```java
+void remove(Integer key) {
+  int hash = hash(key);
+  LinkedList<Entry> entries = set[hash];
+  
+  if (entries == null)
+    return;
+  
+  Entry entry = getEntry(key, entries);
+  
+  if (entry == null)
+    return;
+  
+  entries.remove(entry);
+}
+```
+
+### Has/Contains Operation
+
+Checks if a key exists in the set:
+
+```java
+boolean has(Integer key) {
+  int hash = hash(key);
+  LinkedList<Entry> entries = set[hash];
+  
+  if (entries == null)
+    return false;
+  
+  Entry entry = getEntry(key, entries);
+  
+  return entry != null;
+}
+```
+
+## Implementation Details
+
+### Entry Class
+
+Unlike HashMap, HashSet entries only store keys:
+
+```java
+class Entry {
+  Integer key;
+  
+  Entry(Integer key) {
+    this.key = key;
+  }
+}
+```
+
+### Hash Function
+
+The visualizer uses a simple modulo-based hash for integers:
+
+```java
+private int hash(Integer key) {
+  // Simple modulo operation for integer keys
+  // Maps any integer to indices [0-9]
+  return key % set.length;
+}
+```
+
+<Tabs>
+  <Tab title="Example Hashing">
+    ```text
+    hash(5)  → 5 % 10 = 5  // Index 5
+    hash(15) → 15 % 10 = 5 // Index 5 (collision!)
+    hash(23) → 23 % 10 = 3 // Index 3
+    hash(7)  → 7 % 10 = 7  // Index 7
+    ```
+  </Tab>
+  
+  <Tab title="Collision Handling">
+    ```text
+    // When multiple keys hash to same index:
+    set[5] = [5 → 15 → 25 → 35]
+    
+    // Stored as linked list (chaining)
+    // Operations traverse list to find specific key
+    ```
+  </Tab>
+</Tabs>
+
+### Helper Method
+
+```java
+private Entry getEntry(Integer key, LinkedList<Entry> entries) {
+  for (Entry entry : entries) {
+    if (entry.key.equals(key))
+      return entry;
+  }
+  
+  return null;
+}
+```
+
+## Visual Structure
+
+The HashSet visualizer displays:
+
+<Steps>
+  <Step title="Buckets">
+    10 indexed buckets (0-9) shown as purple headers
+  </Step>
+  
+  <Step title="Entries">
+    Each key displayed as "K: [value]" in gray boxes
+  </Step>
+  
+  <Step title="Collisions">
+    Multiple keys in the same bucket stack vertically
+  </Step>
+  
+  <Step title="Animations">
+    Smooth transitions when adding/removing entries
+  </Step>
+</Steps>
+
+## Time & Space Complexity
+
+<CardGroup cols={3}>
+  <Card title="Add" icon="plus">
+    **Average:** O(1)  
+    **Worst:** O(n)
+  </Card>
+  
+  <Card title="Remove" icon="trash">
+    **Average:** O(1)  
+    **Worst:** O(n)
+  </Card>
+  
+  <Card title="Contains" icon="magnifying-glass">
+    **Average:** O(1)  
+    **Worst:** O(n)
+  </Card>
+</CardGroup>
+
+**Space Complexity:** O(n) where n = number of unique elements
+
+<Info>
+  The O(1) average case assumes a good hash function that distributes keys uniformly across buckets. Poor distribution leads to long chains and degraded performance.
+</Info>
+
+## Common Use Cases
+
+HashSets are ideal for:
+
+### 1. Duplicate Detection
+
+```java
+HashSet<Integer> seen = new HashSet<>();
+
+for (int num : array) {
+  if (seen.has(num)) {
+    System.out.println("Duplicate found: " + num);
+  }
+  seen.add(num);
+}
+```
+
+### 2. Membership Testing
+
+```java
+HashSet<String> allowedUsers = new HashSet<>();
+allowedUsers.add("alice");
+allowedUsers.add("bob");
+
+if (allowedUsers.has(username)) {
+  grantAccess();
+}
+```
+
+### 3. Removing Duplicates
+
+```java
+// Convert array to set (removes duplicates)
+Integer[] array = {1, 2, 2, 3, 4, 4, 5};
+HashSet<Integer> unique = new HashSet<>();
+
+for (int num : array) {
+  unique.add(num);
+}
+// unique now contains {1, 2, 3, 4, 5}
+```
+
+### 4. Set Operations
+
+```java
+HashSet<Integer> setA = new HashSet<>(); // {1, 2, 3}
+HashSet<Integer> setB = new HashSet<>(); // {3, 4, 5}
+
+// Union, intersection, difference operations
+// (implementation depends on language/library)
+```
+
+## Collision Resolution: Chaining
+
+Like HashMap, this HashSet uses **chaining** to handle collisions:
+
+- Each bucket contains a `LinkedList<Entry>`
+- Keys that hash to the same index are stored in the same list
+- Operations traverse the list to find specific keys
+
+<Note>
+  Try the visualizer with keys like 5, 15, 25, 35 - they all hash to index 5, demonstrating collision handling through chaining.
+</Note>
+
+## Interactive Learning
+
+Use the [live visualizer](https://dsvisualizer.isatvik.com/hashset) to:
+
+1. **Add unique values** and watch where they're placed
+2. **Attempt duplicates** and observe they're rejected
+3. **Create collisions** using numbers like 3, 13, 23 (all hash to index 3)
+4. **Remove entries** and see the structure update
+5. **Test membership** by checking if values exist
+
+## HashSet vs Other Data Structures
+
+| Feature | HashSet | Array | Linked List | BST |
+|---------|---------|-------|-------------|-----|
+| **Search** | O(1) avg | O(n) | O(n) | O(log n) |
+| **Insert** | O(1) avg | O(1)* | O(1)** | O(log n) |
+| **Delete** | O(1) avg | O(n) | O(n) | O(log n) |
+| **Duplicates** | No | Yes | Yes | No*** |
+| **Ordered** | No | Yes | Yes | Yes |
+
+*Amortized for dynamic arrays  
+**At head/tail only  
+***Depends on implementation
+
+## Implementation in the Visualizer
+
+The DS Visualizer uses a React hook (`useHashMap`) that powers both HashMap and HashSet:
+
+```typescript
+const useHashMap = (options: { type: "Set" | "Map" }) => {
+  // For HashSet: type = "Set"
+  // Hash function: +key % 10 (numeric modulo)
+  
+  const put = (key: string, value?: string) => {
+    let index = +key % 10; // Integer hash
+    
+    // Prevent duplicates
+    if (map[index].find(node => node.key === key)) 
+      return;
+    
+    map[index] = [new Node(key, value, options), ...map[index]];
+  };
+  
+  // ... remove and render methods
+};
+```
+
+<Info>
+  The visualizer enforces integer keys for HashSet to demonstrate numeric hashing clearly. Production HashSets typically accept any hashable type.
+</Info>
+
+## Related Data Structures
+
+<CardGroup cols={2}>
+  <Card title="HashMap" icon="table" href="/data-structures/hashmap">
+    Store key-value pairs instead of just keys
+  </Card>
+  
+  <Card title="Binary Search Tree" icon="diagram-nested">
+    Ordered alternative with O(log n) operations
+  </Card>
+</CardGroup>
+
+## Key Takeaways
+
+- HashSets store **unique keys only** (no associated values)
+- Operations are **O(1) average time** (add, remove, contains)
+- **Duplicates are automatically prevented** without errors
+- Uses **chaining** to resolve hash collisions
+- Perfect for **membership testing** and **duplicate detection**
+- Simpler than HashMap when you don't need key-value associations
+- **No ordering guarantees** (unlike sorted sets or trees)
+
+<Warning>
+  HashSets do not maintain insertion order. If order matters, consider LinkedHashSet or other ordered data structures.
+</Warning>

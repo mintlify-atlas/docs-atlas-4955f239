@@ -1,0 +1,328 @@
+---
+title: HashMap Visualizer
+description: Interactive visualization of HashMap data structure with collision handling using chaining
+---
+
+## What is a HashMap?
+
+A **HashMap** is a powerful data structure based on key-value pairs. You provide a key and retrieve its associated value instantly. The defining characteristic of HashMaps is that **keys must be unique**.
+
+Think of it like an array where:
+- The **key** acts as the index
+- The **value** is the data stored at that location
+
+<Note>
+  HashMaps provide average O(1) time complexity for lookups, insertions, and deletions, making them one of the most efficient data structures for key-based access.
+</Note>
+
+## Try the Interactive Visualizer
+
+Experiment with HashMap operations in real-time:
+
+<Card title="HashMap Visualizer" icon="chart-network" href="https://dsvisualizer.isatvik.com/hashmap">
+  Add key-value pairs, remove entries, and watch how collision handling works with visual animations.
+</Card>
+
+## Understanding Hashing
+
+The term **HASH** refers to a hash function - similar to encryption but one-way. When you hash data, you cannot retrieve the original form.
+
+### Building a Simple HashMap
+
+Let's understand how HashMaps work internally:
+
+<Tabs>
+  <Tab title="Basic Concept">
+    ```text
+    // Start with an array of size 10
+    hashArr = new Array(10)
+    
+    // Want to add "alex" - where should it go?
+    // Use a hash function based on string length
+    
+    "alex".length = 4
+    // Store "alex" at index 4
+    
+    // To retrieve: hash("alex") → 4 → lookup array[4]
+    // Time complexity: O(1)
+    ```
+  </Tab>
+  
+  <Tab title="Collision Problem">
+    ```text
+    hashArr = [ , , , , alex, , , , , ]
+    
+    // Now add "matt" (length = 4)
+    // hash("matt") → 4
+    // But index 4 is already taken by "alex"!
+    
+    // This is called a COLLISION
+    // Solution: Use chaining (store a list at each index)
+    
+    hashArr = [ , , , , [alex, matt], , , , , ]
+    ```
+  </Tab>
+  
+  <Tab title="Modulo Operation">
+    ```text
+    // What if string length > 10?
+    // Use modulo to wrap around
+    
+    hash(key) = key.length % 10
+    
+    "verylongname".length = 12
+    12 % 10 = 2
+    // Store at index 2
+    
+    // This ensures all keys map to valid indices [0-9]
+    ```
+  </Tab>
+</Tabs>
+
+## HashMap Operations
+
+The DS Visualizer implementation uses an array of size 10 with chaining to handle collisions. The hash function computes `key.length % 10` to determine the bucket index.
+
+### Put Operation
+
+Inserts or updates a key-value pair:
+
+```java
+void put(T key, E value) {
+  int hashNumber = hash(key);
+  LinkedList<Entry> entries = map[hashNumber];
+  
+  // Create new list if bucket is empty
+  if (entries == null) {
+    entries = new LinkedList<Entry>();
+    map[hashNumber] = entries;
+  }
+  
+  Entry entry = getEntry(key, entries);
+  
+  // Update existing key (keys must be unique)
+  if (entry != null) {
+    entry.value = value;
+    return;
+  }
+  
+  // Add new entry
+  entries.add(new Entry(key, value));
+}
+```
+
+<Info>
+  **Time Complexity:** O(n) worst case where n = entries in bucket, but with a good hash function approaches O(1) average case
+</Info>
+
+### Get Operation
+
+Retrieves the value associated with a key:
+
+```java
+E get(T key) {
+  LinkedList<Entry> entries = map[hash(key)];
+  
+  if (entries == null)
+    return null;
+  
+  Entry entry = getEntry(key, entries);
+  
+  if (entry == null)
+    return null;
+  
+  return entry.value;
+}
+```
+
+### Remove Operation
+
+Deletes a key-value pair from the map:
+
+```java
+void remove(T key) {
+  LinkedList<Entry> entries = map[hash(key)];
+  
+  if (entries == null)
+    return;
+  
+  Entry entry = getEntry(key, entries);
+  
+  if (entry == null)
+    return;
+  
+  entries.remove(entry);
+}
+```
+
+### Has Operation
+
+Checks if a key exists in the map:
+
+```java
+boolean has(T key) {
+  LinkedList<Entry> entries = map[hash(key)];
+  
+  if (entries == null)
+    return false;
+  
+  Entry entry = getEntry(key, entries);
+  
+  return entry != null;
+}
+```
+
+## Implementation Details
+
+### Entry Class
+
+The HashMap uses an inner `Entry` class to store key-value pairs:
+
+```java
+class Entry {
+  T key;
+  E value;
+  
+  Entry(T key, E value) {
+    this.key = key;
+    this.value = value;
+  }
+}
+```
+
+### Hash Function
+
+The implementation uses Java's built-in `hashCode()` method:
+
+```java
+private int hash(T key) {
+  // hashCode() returns a unique integer for each object
+  // We take modulo 10 to fit our array size
+  // Math.abs handles negative hash codes
+  
+  return Math.abs(key.hashCode() % 10);
+}
+```
+
+<Note>
+  In the visualizer, the hash function uses `key.length % 10` for strings to make collision behavior more predictable and educational.
+</Note>
+
+### Helper Method
+
+```java
+private Entry getEntry(T key, LinkedList<Entry> entries) {
+  for (Entry entry : entries)
+    if (entry.key == key)
+      return entry;
+  
+  return null;
+}
+```
+
+## Generics in Action
+
+This HashMap implementation uses Java generics (`<T, E>`) for type flexibility:
+
+```java
+public class HashMap<T, E> {
+  // T = key type
+  // E = value type
+}
+
+// Usage examples:
+HashMap<String, Integer> ages = new HashMap<>();
+ages.put("Alice", 25);
+ages.put("Bob", 30);
+
+HashMap<Integer, String> names = new HashMap<>();
+names.put(1, "First");
+names.put(2, "Second");
+```
+
+## Time & Space Complexity
+
+<CardGroup cols={2}>
+  <Card title="Put Operation" icon="plus">
+    **Time:** O(1) average, O(n) worst case  
+    **Space:** O(n) where n = total entries
+  </Card>
+  
+  <Card title="Get Operation" icon="magnifying-glass">
+    **Time:** O(1) average, O(n) worst case  
+    **Space:** O(1)
+  </Card>
+  
+  <Card title="Remove Operation" icon="trash">
+    **Time:** O(1) average, O(n) worst case  
+    **Space:** O(1)
+  </Card>
+  
+  <Card title="Has Operation" icon="check">
+    **Time:** O(1) average, O(n) worst case  
+    **Space:** O(1)
+  </Card>
+</CardGroup>
+
+<Warning>
+  The worst-case O(n) occurs when all keys hash to the same bucket (poor hash function or adversarial input). A good hash function distributes keys uniformly across buckets.
+</Warning>
+
+## Collision Handling: Chaining
+
+This implementation uses **chaining** (also called separate chaining) to resolve collisions:
+
+- Each bucket contains a `LinkedList<Entry>`
+- Multiple entries with the same hash share the same bucket
+- Operations traverse the linked list to find specific keys
+
+### Alternative: Open Addressing
+
+Other collision strategies exist but aren't used here:
+- **Linear Probing:** Find next empty slot
+- **Quadratic Probing:** Search with quadratic intervals
+- **Double Hashing:** Use second hash function
+
+## Common Use Cases
+
+HashMaps excel at:
+
+- **Caching:** Store computed results for fast retrieval
+- **Frequency Counting:** Track occurrences of elements
+- **Lookup Tables:** Map codes to values (e.g., zip codes to cities)
+- **Graph Adjacency Lists:** Store vertex connections
+- **Algorithm Optimization:** Reduce O(n²) to O(n) in many problems
+
+<Info>
+  HashMaps are one of the most frequently used data structures in algorithm optimization. They can often transform slow nested loops into fast single-pass solutions.
+</Info>
+
+## Interactive Learning
+
+Use the [live visualizer](https://dsvisualizer.isatvik.com/hashmap) to:
+
+1. **Add entries** with different keys and watch the hash function place them
+2. **Trigger collisions** by using keys with the same length
+3. **Remove entries** and see how the structure updates
+4. **Observe animations** showing data flow through the HashMap
+
+## Related Data Structures
+
+<CardGroup cols={2}>
+  <Card title="HashSet" icon="list" href="/data-structures/hashset">
+    Similar structure but stores only keys (no values)
+  </Card>
+  
+  <Card title="Binary Search Tree" icon="diagram-nested">
+    Alternative for ordered key-value storage
+  </Card>
+</CardGroup>
+
+## Key Takeaways
+
+- HashMaps provide **O(1) average time** for put, get, and remove operations
+- **Keys must be unique**; duplicate keys update the value
+- **Hash functions** convert keys to array indices
+- **Collisions** are resolved using chaining with linked lists
+- **Quality of hash function** directly impacts performance
+- Ideal for problems requiring fast lookups and frequency tracking

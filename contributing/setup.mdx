@@ -1,0 +1,180 @@
+---
+title: Development Setup
+description: Set up your local development environment for contributing to DS Visualizer
+---
+
+## Prerequisites
+
+Before you begin, ensure you have the following installed:
+
+- **Node.js** (v14 or higher recommended)
+- **Yarn** (v1.22.10)
+- **Git**
+
+<Warning>
+  DS Visualizer uses Yarn v1.22.10 as the package manager. Make sure to use Yarn instead of npm to avoid dependency conflicts.
+</Warning>
+
+## Tech Stack
+
+DS Visualizer is built with modern web technologies:
+
+- **Framework**: Next.js 12.3.4
+- **Language**: TypeScript
+- **Styling**: TailwindCSS
+- **Animations**: Framer Motion
+- **Content**: MDX (next-mdx-remote)
+- **Code Highlighting**: Prism.js
+- **Formatter**: Prettier
+
+## Installation
+
+Follow these steps to set up your development environment:
+
+<Steps>
+  <Step title="Fork and clone the repository">
+    Fork the [ds-visualizer repository](https://github.com/ds-visualizer/ds-visualizer) to your GitHub account, then clone it:
+    
+    ```bash
+    git clone https://github.com/YOUR_USERNAME/ds-visualizer.git
+    cd ds-visualizer
+    ```
+  </Step>
+  
+  <Step title="Install dependencies">
+    Install all project dependencies using Yarn:
+    
+    ```bash
+    yarn install
+    ```
+    
+    This will install all dependencies listed in `package.json`, including:
+    - Next.js and React
+    - TypeScript and type definitions
+    - TailwindCSS and PostCSS
+    - Framer Motion for animations
+    - MDX processing tools
+  </Step>
+  
+  <Step title="Start the development server">
+    Launch the development server:
+    
+    ```bash
+    yarn dev
+    ```
+    
+    The application will be running at:
+    
+    ```
+    http://localhost:3000/
+    ```
+  </Step>
+  
+  <Step title="Verify the setup">
+    Open your browser and navigate to `http://localhost:3000/` to verify everything is working correctly.
+  </Step>
+</Steps>
+
+## Available Scripts
+
+DS Visualizer provides the following npm scripts:
+
+<CodeGroup>
+
+```bash Development
+yarn dev
+# Starts the Next.js development server with hot reloading
+```
+
+```bash Production Build
+yarn build
+# Creates an optimized production build
+```
+
+```bash Production Server
+yarn start
+# Starts the Next.js production server (requires yarn build first)
+```
+
+</CodeGroup>
+
+## Project Structure
+
+Understanding the project structure will help you navigate the codebase:
+
+```
+ds-visualizer/
+├── content/           # MDX content files
+│   └── [BlogName]/    # Individual content directories
+├── pages/             # Next.js pages and routing
+├── components/        # React components
+├── styles/            # CSS and TailwindCSS files
+├── public/            # Static assets
+└── package.json       # Dependencies and scripts
+```
+
+### Content Directory
+
+All educational content is stored in `content/[BlogName]/**` directories:
+
+- Each topic has its own directory
+- Content is written in MDX format
+- Supports code examples with syntax highlighting
+- Can include interactive React components
+
+<Tip>
+  When adding or editing content, make sure to follow the existing MDX structure and formatting conventions.
+</Tip>
+
+## Code Formatting
+
+DS Visualizer uses **Prettier** for code formatting. Make sure to:
+
+- Format your code before committing
+- Use consistent indentation and style
+- Follow the existing code conventions in the project
+
+<Note>
+  Consider setting up Prettier integration in your editor for automatic formatting on save.
+</Note>
+
+## Troubleshooting
+
+### Port 3000 already in use
+
+If port 3000 is already occupied, you can:
+
+```bash
+# Kill the process using port 3000
+lsof -ti:3000 | xargs kill -9
+
+# Or run on a different port
+PORT=3001 yarn dev
+```
+
+### Dependency conflicts
+
+If you encounter dependency issues:
+
+```bash
+# Remove node_modules and yarn.lock
+rm -rf node_modules yarn.lock
+
+# Reinstall dependencies
+yarn install
+```
+
+### TypeScript errors
+
+Ensure you're using a compatible TypeScript version (4.4.3 as specified in `package.json`).
+
+## Next Steps
+
+Once your environment is set up:
+
+1. Review the [Contribution Guidelines](/contributing/guidelines)
+2. Find an issue to work on or create a new one
+3. Make your changes and test thoroughly
+4. Submit a pull request
+
+Happy coding!

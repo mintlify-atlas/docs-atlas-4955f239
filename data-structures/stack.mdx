@@ -1,0 +1,211 @@
+---
+title: Stack Visualizer
+description: Interactive visualization of the Stack data structure with push, pop, and empty operations
+---
+
+The Stack visualizer provides an interactive way to understand how the Stack data structure works. A Stack follows the LIFO (Last In First Out) or FILO (First In Last Out) principle, similar to a stack of books.
+
+<Info>
+  Try the live visualizer at [dsvisualizer.isatvik.com/stack](https://dsvisualizer.isatvik.com/stack)
+</Info>
+
+## What is a Stack?
+
+Stack is a data structure where elements that enter last leave first. This is similar to a stack of books - you can only add or remove items from the top.
+
+They are also known as:
+- **LIFO** - Last In First Out
+- **FILO** - First In Last Out
+
+Stacks can be built using arrays or linked lists. The implementation in this visualizer uses an array-based approach.
+
+## Interactive Controls
+
+The visualizer provides three main operations you can perform:
+
+<Tabs>
+  <Tab title="Push">
+    Adds an element on top of the stack.
+    
+    **How to use:**
+    1. Enter a value in the input field
+    2. Click the "Push" button
+    3. Watch the element appear at the top of the stack
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Pop">
+    Removes the top element from the stack.
+    
+    **How to use:**
+    1. Click the "Pop" button
+    2. Watch the top element disappear from the stack
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+  
+  <Tab title="Empty">
+    Clears all elements from the stack.
+    
+    **How to use:**
+    1. Click the "Empty" button
+    2. Watch all elements disappear from the stack
+    
+    **Time Complexity:** O(1)
+    
+    **Space Complexity:** O(1)
+  </Tab>
+</Tabs>
+
+## Implementation Details
+
+The basic structure of a Stack looks like this:
+
+```java Stack.java
+class stacks{
+    private int[] items;
+    private int count;
+    private int capacity;
+
+    // Constructor for determining the size of the stack at initialization
+    public Stacks(int capacity){
+        items = new int[capacity];
+        this.capacity = capacity;
+    }
+
+    public void push(int value) {}
+    public void pop() {}
+    public int peek() {}
+    public boolean isEmpty() {}
+}
+```
+
+### Key Variables
+
+- **count** - Index for the next element that enters
+- **items** - Array that holds the stack elements
+- **capacity** - Variable that holds the length of the array
+
+## Core Operations
+
+<Steps>
+  <Step title="Push Operation">
+    The push method adds an element on top of the stack.
+    
+    ```java push.java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public void push(int value){
+        if(count == capacity) // Stack is full
+            return;
+        
+        items[count++] = value;
+    }
+    ```
+    
+    <Note>
+      Always check if the stack is full before pushing. The visualizer will prevent you from exceeding capacity.
+    </Note>
+  </Step>
+  
+  <Step title="Pop Operation">
+    The pop method removes the top element from the stack.
+    
+    ```java pop.java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public int pop(){
+        if(count == 0) // No elements to pop
+            return;
+        
+        int temp = items[count - 1];
+        items[count--] = 0;
+        return temp;
+    }
+    ```
+    
+    <Note>
+      Check if the stack is empty before popping to avoid errors.
+    </Note>
+  </Step>
+  
+  <Step title="Peek Operation">
+    The peek method returns the top element without removing it.
+    
+    ```java peek.java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public int peek(){
+        if(count == 0)
+            return; // throw error
+        
+        return items[count-1];
+    }
+    ```
+    
+    The key difference: peek returns the element but doesn't remove it, whereas pop removes the element.
+  </Step>
+  
+  <Step title="isEmpty Operation">
+    Check if the stack is empty.
+    
+    ```java isEmpty.java
+    /*
+     * Time: O(1)
+     * Space: O(1)
+     */
+    public boolean isEmpty(){
+        return count == 0;
+    }
+    ```
+  </Step>
+</Steps>
+
+## Real-World Example: Balanced Parentheses
+
+One common application of stacks is checking for balanced brackets in expressions. The visualizer includes a bracket matching example.
+
+<Steps>
+  <Step title="Step 1">
+    Compare the first character of the string. If it's an open bracket `(`, `{`, `[`, or `<`, push it to the stack.
+    
+    If it's a close bracket, compare with the bracket on top of the stack using the peek method.
+  </Step>
+  
+  <Step title="Step 2">
+    If the brackets aren't corresponding pairs, the expression is not balanced.
+    
+    If they match, pop the element from the stack.
+  </Step>
+  
+  <Step title="Step 3">
+    Continue until you reach the end of the string.
+    
+    If the stack is empty at the end, the parentheses are balanced.
+  </Step>
+</Steps>
+
+## Performance Summary
+
+| Operation | Time Complexity | Space Complexity |
+|-----------|----------------|------------------|
+| Push      | O(1)           | O(1)             |
+| Pop       | O(1)           | O(1)             |
+| Peek      | O(1)           | O(1)             |
+| isEmpty   | O(1)           | O(1)             |
+| Empty     | O(1)           | O(1)             |
+
+<Info>
+  All stack operations are extremely efficient with constant time and space complexity!
+</Info>
