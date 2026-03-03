@@ -1,0 +1,101 @@
+{
+  "projectType": "saas",
+  "projectName": "DS Visualizer",
+  "projectDescription": "Interactive visualizations and code explanations for learning data structures and algorithms",
+  "theme": "palm",
+  "primaryColor": "#3B82F6",
+  "lightColor": "#60A5FA",
+  "darkColor": "#2563EB",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": ["introduction", "quickstart"]
+          },
+          {
+            "group": "Core Concepts",
+            "pages": ["concepts/overview", "concepts/visualizers", "concepts/code-explanations"]
+          },
+          {
+            "group": "Contributing",
+            "pages": ["contributing/overview", "contributing/setup", "contributing/guidelines"]
+          }
+        ]
+      },
+      {
+        "tab": "Data Structures",
+        "groups": [
+          {
+            "group": "Linear Structures",
+            "pages": [
+              "data-structures/stack",
+              "data-structures/queue",
+              "data-structures/linkedlist"
+            ]
+          },
+          {
+            "group": "Trees",
+            "pages": [
+              "data-structures/binary-tree",
+              "data-structures/tree",
+              "data-structures/tree-traversals"
+            ]
+          },
+          {
+            "group": "Graphs",
+            "pages": [
+              "data-structures/graph",
+              "data-structures/graph-traversals"
+            ]
+          },
+          {
+            "group": "Hash-Based",
+            "pages": [
+              "data-structures/hashmap",
+              "data-structures/hashset"
+            ]
+          },
+          {
+            "group": "Priority & Heap",
+            "pages": [
+              "data-structures/heap",
+              "data-structures/priority-queue"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Algorithms",
+        "groups": [
+          {
+            "group": "Sorting",
+            "pages": ["algorithms/selection-sort"]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "Interactive visualizations for 12+ data structures",
+    "Step-by-step code explanations with time/space complexity analysis",
+    "Live manipulation of data structures with real-time updates",
+    "Educational content with MDX-based documentation",
+    "Built for university courses with 100+ students"
+  ],
+  "publicApiSurface": [
+    "Stack visualizer with push/pop operations",
+    "Queue visualizer with enqueue/dequeue",
+    "LinkedList with add/remove at any position",
+    "Binary Tree with insert/delete operations",
+    "Graph with traversal algorithms (BFS/DFS)",
+    "HashMap and HashSet visualizations",
+    "Heap with heapify operations",
+    "Priority Queue operations",
+    "Tree traversals (inorder, preorder, postorder)",
+    "Graph traversals (BFS, DFS)",
+    "Selection Sort visualization"
+  ]
+}
